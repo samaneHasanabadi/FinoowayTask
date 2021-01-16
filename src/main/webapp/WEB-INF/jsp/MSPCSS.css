@@ -1,0 +1,15 @@
+body{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.m1{
+    height: 40%;
+    width: 100%;
+    background-color: #55d5d1;
+}
+.m2{
+    height: 60%;
+    width: 100%;
+    background-color: blueviolet;
+}
