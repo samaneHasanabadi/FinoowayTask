@@ -34,7 +34,7 @@ public class UserController2 {
         return "home";
     }
 
-    @GetMapping("signup")
+    @GetMapping("/signup")
     public String signup(){
         return "signup";
     }
@@ -58,6 +58,8 @@ public class UserController2 {
             return ResponseEntity.ok(exception.getMessage());
         }
     }
+
+
 
 //    @PostMapping(value = "/lo",consumes = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody

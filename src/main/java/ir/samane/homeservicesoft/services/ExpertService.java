@@ -37,7 +37,7 @@ public class ExpertService extends UserService {
         expertDao.save(expert);
         final ConfirmationToken confirmationToken = new ConfirmationToken(expert);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        sendConfirmationMail(user.getUsername(), confirmationToken.getConfirmationToken());
+        sendConfirmationMail(user.getEmail(), confirmationToken.getConfirmationToken());
         return save;
     }
 

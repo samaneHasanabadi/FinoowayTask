@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<%--    <link rel="stylesheet" href="MSPCSS">--%>
+    <%--    <link rel="stylesheet" href="MSPCSS">--%>
     <title>title</title>
 </head>
 <body>
@@ -38,80 +38,32 @@
     </div>
 </nav>
 <div style="display: flex; flex-direction: row">
-<div class="vertical-menu">
-    <a href="ManagerServicePage" class="active">Add Service</a>
-    <a href="ManagerShowServicePage">Show Services</a>
-</div>
-<div class="well well-large" style="background-color: #55d5d1; display: flex; flex-direction: row; width: 80%">
-    <div style="width: 40%;margin: 3%">
-        <form id="Service">
-            <div class="mb-3">
-            <label for="serviceName" class="form-label">Service Name</label>
-            <input name="name" class="form-control" id="serviceName">
-            </div><br>
-            <div class="mb-3">
-            <label for="serviceType" class="form-label">Service Type</label>
-            <input name="type" class="form-control" id="serviceType">
-            </div><br>
-            <div>
-            <button type="submit" class="btn btn-success" id="serviceSubmit">Save</button>
-            </div>
-        </form>
+    <div class="vertical-menu">
+        <a href="ManagerServicePage">Add Service</a>
+        <a href="ManagerShowServicePage" class="active">Show Services</a>
     </div>
-    <div style="width: 4%">
+    <div style="background-color: blueviolet;width: 80%">
+        <button type="button" class="btn btn-primary" id="showServiceBtn">Show Services</button>
+        <h3>List Of Services</h3>
+        <table class="table table-striped" id="serviceTable">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Service</th>
+                <th scope="col">Service type</th>
+                <th scope="col">Sub Service</th>
+                <th scope="col">Type</th>
+                <th scope="col">Price</th>
+                <th scope="col">Description</th>
+                <th scope="col">Edit/Delete</th>
+                <th scope="col">Select</th>
+                <th scope="col" style="display: none">Experts</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
-    <div style="width: 40%; margin: 3%">
-        <form id="subService" method="post">
-            <div class="mb-3">
-            <label for="name" class="form-label">Sub Service Name</label>
-            <input name="name" id="name" class="form-control">
-            </div><br>
-            <div class="mb-3">
-            <label for="type" class="form-label">Sub Service Type</label>
-            <input name="type.name" id="type" class="form-control">
-            </div><br>
-            <div class="mb-3">
-            <label for="serviceSelector" class="form-label">Service</label>
-            <select id="ServiceSelector" class="form-select" aria-label="Default select example">
-                <option></option>
-            </select>
-            </div><br>
-
-        <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input name="price" id="price" class="form-control">
-        </div><br>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" rows="3"></textarea>
-        </div><br>
-        <button type="submit" class="btn btn-success" id="submit">Save</button>
-    </form>
-    </div>
-
-</div>
-</div>
-<div style="background-color: blueviolet;">
-<button type="button" class="btn btn-primary" id="showServiceBtn">Show Services</button>
-<h3>List Of Services</h3>
-<table class="table table-striped" id="serviceTable">
-    <thead class="thead-light">
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Service</th>
-        <th scope="col">Service type</th>
-        <th scope="col">Sub Service</th>
-        <th scope="col">Type</th>
-        <th scope="col">Price</th>
-        <th scope="col">Description</th>
-        <th scope="col">Edit/Delete</th>
-        <th scope="col">Select</th>
-        <th scope="col" style="display: none">Experts</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="editServices" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
@@ -570,10 +522,10 @@
     }
 
     function addExpertToTd(id, name, family){
-         return "<div id='expertDiv "+id+" " +subServiceId+"'><button id=\"minusButton "+id+" " +subServiceId+"\" " +
-             "onclick='removeExpertOfSubService(id)' " +
-             "class=\"btn btn-primary\"><i class=\"fa fa-minus\" style=\"color: white\"></i></button>" +
-             "<div>"+ name + " " +family+"</div></div>";
+        return "<div id='expertDiv "+id+" " +subServiceId+"'><button id=\"minusButton "+id+" " +subServiceId+"\" " +
+            "onclick='removeExpertOfSubService(id)' " +
+            "class=\"btn btn-primary\"><i class=\"fa fa-minus\" style=\"color: white\"></i></button>" +
+            "<div>"+ name + " " +family+"</div></div>";
 
     }
 

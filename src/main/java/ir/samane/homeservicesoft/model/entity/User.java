@@ -51,7 +51,7 @@ public class User {
         this.family = family;
     }
 
-    public void setEmail(String email) {
+    public void getEmail(String email) {
         this.email = email;
     }
 
@@ -69,10 +69,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getUsername() {
-        return email;
     }
 
     public String getEmail() {

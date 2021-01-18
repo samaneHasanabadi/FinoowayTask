@@ -14,7 +14,7 @@
 </head>
 <body>
 <form id="form1" action="/loginProcess" method="POST">
-    <label for="email">username</label>
+    <label for="email">email</label>
     <input type="text" id="email" name="email"><br><br>
     <label for="password">password</label>
     <input type="text" id="password" name="password"><br><br>

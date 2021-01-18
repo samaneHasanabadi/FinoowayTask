@@ -2,11 +2,9 @@ package ir.samane.homeservicesoft.services;
 
 import ir.samane.homeservicesoft.dto.UserDto;
 import ir.samane.homeservicesoft.model.dao.UserDao;
-import ir.samane.homeservicesoft.model.entity.ConfirmationToken;
 import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,10 +49,10 @@ public class UserService implements UserDetailsService {
 
     public User registerUser(User user) throws Exception {
         User save = null;
-        if(findByEmail(user.getUsername()) && passwordCheck(user.getPassword())) {
+        if(findByEmail(user.getEmail()) && passwordCheck(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             save = userDao.save(user);
-        }else if(!findByEmail(user.getUsername()))
+        }else if(!findByEmail(user.getEmail()))
             throw new Exception("Email is used before");
         else if(!passwordCheck(user.getPassword()))
             throw new Exception("Password is in incorrect format");
@@ -69,7 +67,7 @@ public class UserService implements UserDetailsService {
         User user=userByEmail.get();
         Set<GrantedAuthority> authorities=new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     public List<Expert> findBy(UserDto userDto){

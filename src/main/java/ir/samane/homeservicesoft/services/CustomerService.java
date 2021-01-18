@@ -3,7 +3,6 @@ package ir.samane.homeservicesoft.services;
 import ir.samane.homeservicesoft.model.dao.CustomerDao;
 import ir.samane.homeservicesoft.model.entity.ConfirmationToken;
 import ir.samane.homeservicesoft.model.entity.Customer;
-import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.User;
 import ir.samane.homeservicesoft.model.enums.RegisterStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class CustomerService extends UserService {
         customerDao.save(customer);
         final ConfirmationToken confirmationToken = new ConfirmationToken(customer);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        sendConfirmationMail(user.getUsername(), confirmationToken.getConfirmationToken());
+        sendConfirmationMail(user.getEmail(), confirmationToken.getConfirmationToken());
         return save;
     }
 
