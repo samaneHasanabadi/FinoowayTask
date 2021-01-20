@@ -7,6 +7,7 @@ import ir.samane.homeservicesoft.services.ExpertService;
 import ir.samane.homeservicesoft.services.FileStorageService;
 import ir.samane.homeservicesoft.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +52,8 @@ public class ExpertController {
             return "/ConfirmErrorPage";
     }
 
-    @GetMapping("/ExpertPage")
+    @GetMapping("/Expert/Page")
     public String getExpertPage(){
-        return "/ExpertPage";
+        return "ExpertPage";
     }
 }

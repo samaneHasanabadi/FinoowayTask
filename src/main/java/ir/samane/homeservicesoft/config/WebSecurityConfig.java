@@ -29,40 +29,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // allow /api/public/product/** and /api/public/content/** not intercepted by Spring OAuth2
         requestMatchers.add(new AntPathRequestMatcher("/home"));
         requestMatchers.add(new AntPathRequestMatcher("/signup"));
-//        requestMatchers.add(new AntPathRequestMatcher("/ManagerExpertPage"));
-//        requestMatchers.add(new AntPathRequestMatcher("/ManagerServicePage"));
-//        requestMatchers.add(new AntPathRequestMatcher("/ManagerSearchPage"));
-//        requestMatchers.add(new AntPathRequestMatcher("/ExpertPage"));
-//        requestMatchers.add(new AntPathRequestMatcher("/login"));
-//        requestMatchers.add(new AntPathRequestMatcher("/loginProcess"));
-//        requestMatchers.add(new AntPathRequestMatcher("/loinError"));
-//        requestMatchers.add(new AntPathRequestMatcher("/profile"));
-
         //csrf attacks kari nadarim
-        http.csrf().disable().requestMatcher(new OrRequestMatcher(requestMatchers))
+        http.csrf().disable()
+//                .requestMatcher(new OrRequestMatcher(requestMatchers))
                 .authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers(HttpMethod.POST, "/").permitAll()
-//                .antMatchers(HttpMethod.GET, "/").permitAll()
-//                .antMatchers(HttpMethod.POST, "/").permitAll()
-//                .and().httpBasic();
-                .antMatchers("/home","/signup").permitAll()
-                //.antMatchers("/ManagerSearchPage").hasAuthority("MANAGER")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/loginProcess")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/profile")
-                .failureForwardUrl("/loginError")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll()
-                .and()
-                .httpBasic();
+                .antMatchers("/").permitAll()
+                .antMatchers(HttpMethod.POST, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+//                .antMatchers(HttpMethod.POST, "/addUser/*").permitAll()
+                .and().httpBasic();
+//                .antMatchers("/home","/signup").permitAll()
+//                .antMatchers("/Manager/*").hasAuthority("MANAGER")
+//                .antMatchers("/Expert/*").hasAuthority("EXPERT")
+//                .antMatchers("/Customer/*").hasAuthority("CUSTOMER")
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .loginProcessingUrl("/loginProcess")
+//                .usernameParameter("email")
+//                .passwordParameter("password")
+//                .defaultSuccessUrl("/profile")
+//                .failureForwardUrl("/loginError")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll()
+//                .and()
+//                .httpBasic();
     }
 
     @Bean

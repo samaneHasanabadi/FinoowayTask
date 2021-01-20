@@ -20,13 +20,13 @@ public class SubServiceService {
 
     public void addSubService(SubService subService) throws Exception {
         if(subService.getType() == null)
-            throw new Exception("نوع زیر خدمت نمی تواند خالی باشد");
+            throw new Exception("Type can not be null");
         if(subService.getType().getName() == null || subService.getType().getName().equals(""))
-            throw new Exception("نام نوع زیر خدمت نمی تواند خالی باشد");
+            throw new Exception("Type name can not be null");
         if(subService.getPrice() <= 0)
-            throw new Exception("قیمت زیر خدمت باید بزرگتر از صفر باشد");
+            throw new Exception("Price must be bigger than zero");
         if(subService.getDescription() == null || subService.getDescription().equals(""))
-            throw new Exception("توضیحات زیر خدمت نباید خالی باشد");
+            throw new Exception("Description can not be null or empty");
         subServiceDao.save(subService);
     }
 

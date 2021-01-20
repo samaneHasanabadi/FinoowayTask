@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: samane
-  Date: 1/15/21
-  Time: 4:34 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -27,9 +21,9 @@
             <a class="navbar-brand" href="#">Manager Page</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="ManagerServicePage">Service Page</a></li>
-            <li><a href="ManagerExpertPage">Expert Page</a></li>
-            <li class="active"><a href="ManagerSearchPage">Search Page</a></li>
+            <li><a href="ServicePage">Service Page</a></li>
+            <li><a href="ExpertPage">Expert Page</a></li>
+            <li class="active"><a href="SearchPage">Search Page</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>

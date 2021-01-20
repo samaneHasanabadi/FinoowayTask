@@ -21,9 +21,19 @@ public class ManagerController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/ManagerExpertPage")
+    @GetMapping("/Manager/ShowExpertPage")
+    private String getManagerShowExpertPage(){
+        return "ManagerShowExpertPage";
+    }
+
+    @GetMapping("/Manager/ExpertPage")
     private String getManagerExpertPage(){
         return "ManagerExpertPage";
+    }
+
+    @GetMapping("/Manager/ShowServicePage")
+    private String getManagerShowServicePage(){
+        return "ManagerShowServicePage";
     }
 
     @GetMapping("/approveAllWaitingExperts")
@@ -111,7 +121,7 @@ public class ManagerController {
         }
     }
 
-    @GetMapping("/ManagerServicePage")
+    @GetMapping("/Manager/ServicePage")
     public String ManagerServicePage(){
         return "ManagerServicePage";
     }
@@ -140,7 +150,7 @@ public class ManagerController {
         return userService.findBy(userDto);
     }
 
-    @GetMapping("/ManagerSearchPage")
+    @GetMapping("/Manager/SearchPage")
     public String getManagerSearchPage(){
         return "ManagerSearchPage";
     }

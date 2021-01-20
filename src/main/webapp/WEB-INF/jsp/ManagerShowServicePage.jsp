@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: samane
-  Date: 1/10/21
-  Time: 6:02 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -28,9 +22,9 @@
             <a class="navbar-brand" href="#">Manager Page</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="ManagerServicePage">Service Page</a></li>
-            <li><a href="ManagerExpertPage">Expert Page</a></li>
-            <li><a href="ManagerSearchPage">Search Page</a></li>
+            <li class="active"><a href="ServicePage">Service Page</a></li>
+            <li><a href="ExpertPage">Expert Page</a></li>
+            <li><a href="SearchPage">Search Page</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
@@ -39,10 +33,10 @@
 </nav>
 <div style="display: flex; flex-direction: row">
     <div class="vertical-menu">
-        <a href="ManagerServicePage">Add Service</a>
-        <a href="ManagerShowServicePage" class="active">Show Services</a>
+        <a href="ServicePage">Add Service</a>
+        <a href="ShowServicePage" class="active">Show Services</a>
     </div>
-    <div style="background-color: blueviolet;width: 80%">
+    <div style="background-color: #55d5d1;width: 80%">
         <button type="button" class="btn btn-primary" id="showServiceBtn">Show Services</button>
         <h3>List Of Services</h3>
         <table class="table table-striped" id="serviceTable">
@@ -149,7 +143,7 @@
     }
 
     .vertical-menu a.active {
-        background-color: #4CAF50; /* Add a green color to the "active/current" link */
+        background-color: #163bc1; /* Add a green color to the "active/current" link */
         color: white;
     }
 </style>

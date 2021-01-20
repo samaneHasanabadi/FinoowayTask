@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: samane
@@ -14,25 +15,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <!--link rel="stylesheet" href="CssConfig.css"-->
     <title>title</title>
-    <style>
+    <style type="text/css">
         body {
-            background: url('1.jpg');
+            background-image: url('a.jpg');
         }
     </style>
 </head>
 <body>
 <div>
-<div class="container" style="width: 30%; color: white; background-color: #55d5d1">
+    <div style="display: none" id="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<div class="container" style="width: 30%;margin: 5%;background-image: url('a.jpg')">
 <h2>sign up</h2>
         <div class="mb-3">
         <label for="role" class="form-label">Role</label>
-        <select name="role" id="role" class="form-select" aria-label="Default select example">
+        <select name="role" id="role" class="form-select" aria-label="Default select example" style="color: black">
             <option value="EXPERT">EXPERT</option>
             <option value="CUSTOMER">CUSTOMER</option>
         </select>
@@ -94,7 +98,9 @@
             data : JSON.stringify(userdata),
             dataType : 'json',
             success : function(data) {
-                $("#id").val(data);
+                $("#id").val(data.id);
+                $("#alert").innerHTML = data.message;
+                $("#alert").show();
             }
         });
     });
