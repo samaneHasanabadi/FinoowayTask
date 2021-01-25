@@ -30,10 +30,10 @@ public class ExpertController {
     @PostMapping("/uploadFile/{id}")
     public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id") int id) {
         try {
-            String expertName = fileStorageService.storeFile(file, id);
-            return ResponseEntity.ok("image of expert " + expertName + " is added!");
+            fileStorageService.storeFile(file, id);
+            return ResponseEntity.ok("/home/samane/IdeaProjects/HomeServiceSoft/src/main/webapp/WEB-INF/jsp/resources/static/images/" + id+".jpg");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 

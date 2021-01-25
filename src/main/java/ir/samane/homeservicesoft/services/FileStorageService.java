@@ -7,6 +7,7 @@ import ir.samane.homeservicesoft.model.entity.Expert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class FileStorageService {
     private final Path fileStorageLocation;
     @Autowired
     private ExpertService expertService;
+     private long maxFileSize = 300000;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
@@ -32,7 +34,8 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file, int id) throws Exception{
+    public void storeFile(MultipartFile file, int id) throws Exception{
+        checkFileSize(file);
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if(fileName.contains("..")) {
@@ -41,12 +44,16 @@ public class FileStorageService {
             String[] parts = fileName.split("\\.");
             if(!parts[1].equals("jpg"))
                 throw new ImageWrongFormatException("Format of image must be \"jpg\"");
-            fileName = id + fileName;
-            Expert expert = saveImage(id, fileName);
+            fileName ="" + id ;
             copyImage(file, fileName);
-            return expert.getName();
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    private void checkFileSize(MultipartFile file) throws Exception {
+        if (file.getSize() > maxFileSize){
+            throw new Exception("image size exceeds 300kb!");
         }
     }
 
@@ -55,10 +62,4 @@ public class FileStorageService {
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private Expert saveImage(int id, String fileName) throws Exception {
-        Expert expert = expertService.findById(id);
-        expert.setImage(fileName);
-        expertService.saveExpert(expert);
-        return expert;
-    }
 }

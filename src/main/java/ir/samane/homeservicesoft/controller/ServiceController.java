@@ -1,5 +1,6 @@
 package ir.samane.homeservicesoft.controller;
 
+import ir.samane.homeservicesoft.dto.InputDto;
 import ir.samane.homeservicesoft.dto.SubServiceDto;
 import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.Service;
@@ -7,6 +8,7 @@ import ir.samane.homeservicesoft.model.entity.SubService;
 import ir.samane.homeservicesoft.services.ServiceService;
 import ir.samane.homeservicesoft.services.SubServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,14 @@ public class ServiceController {
     }
 
     @GetMapping("/getAllServices")
-    public @ResponseBody List<Service> getAllSubServices(){
+    public @ResponseBody List<Service> getAllServices(){
         return serviceService.getAllServices();
+    }
+
+    @GetMapping("/getAllSubServices/{pageNumber}")
+    public @ResponseBody Page<SubService> getAllSubServices(@PathVariable("pageNumber") int pageNumber){
+        Page<SubService> subServices = subServiceService.getAllSubServices(pageNumber);
+        return subServices;
     }
 
     @PostMapping("/addSubService")
@@ -37,7 +45,7 @@ public class ServiceController {
             subServiceService.addSubService(subService);
             return ResponseEntity.ok("sub service " + subService.getName() + " is added!");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 
@@ -47,7 +55,7 @@ public class ServiceController {
             serviceService.addService(service);
             return ResponseEntity.ok("service " + service.getName() + " is added!");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 
@@ -57,7 +65,7 @@ public class ServiceController {
             serviceService.addService(service);
             return ResponseEntity.ok("service " + service.getName() + " is edited!");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 
@@ -67,7 +75,7 @@ public class ServiceController {
             subServiceService.addSubService(subService);
             return ResponseEntity.ok("subService " + subService.getName() + " is edited!");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 
@@ -87,7 +95,7 @@ public class ServiceController {
             subServiceService.deleteSubServiceById(id);
             return ResponseEntity.ok("subService is deleted!");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 
@@ -97,7 +105,7 @@ public class ServiceController {
             serviceService.deleteServiceById(id);
             return ResponseEntity.ok("Service is deleted!");
         } catch (Exception exception) {
-            return ResponseEntity.ok(exception.getMessage());
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 
@@ -106,13 +114,54 @@ public class ServiceController {
         return subServiceService.findByServiceNameAndSubServiceName(subServiceDto);
     }
 
-//    @GetMapping("/getExpertsOfSubService/{subServiceId}")
-//    public @ResponseBody List<Expert> getExpertsOfSubService(@PathVariable("subServiceId") int subServiceId){
-//        try {
-//            return subServiceService.getExpertsOfSubService(subServiceId);
-//        } catch (Exception exception) {
-//            return null;
-//        }
-//    }
+    @PostMapping("/checkServiceFiledLength")
+    public ResponseEntity checkServiceFiledLength(@RequestBody InputDto inputDto){
+        try {
+            serviceService.checkFieldLength(inputDto.getInput(), inputDto.getInputName());
+            return ResponseEntity.ok("length looks good!");
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkServiceNameUniqueness")
+    public ResponseEntity checkServiceNameUniqueness(@RequestBody InputDto inputDto){
+        try {
+            serviceService.checkServiceNameUniqueness(inputDto.getInput());
+            return ResponseEntity.ok("name looks good!");
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkSubServiceFiledLength")
+    public ResponseEntity checkSubServiceFiledLength(@RequestBody InputDto inputDto){
+        try {
+            subServiceService.checkFieldLength(inputDto.getInput(), inputDto.getInputName());
+            return ResponseEntity.ok("length looks good!");
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkSubServicePrice")
+    public ResponseEntity checkSubServicePrice(@RequestBody InputDto inputDto){
+        try {
+            subServiceService.checkPrice(Double.parseDouble(inputDto.getInput()));
+            return ResponseEntity.ok("price looks good!");
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkSubServiceNameUniqueness")
+    public ResponseEntity checkSubServiceNameUniqueness(@RequestBody InputDto inputDto){
+        try {
+            subServiceService.checkSubServiceNameUniqueness(inputDto.getInput());
+            return ResponseEntity.ok("name looks good!");
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 
 }

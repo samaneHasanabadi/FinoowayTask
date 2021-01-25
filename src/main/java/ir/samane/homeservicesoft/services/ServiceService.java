@@ -1,24 +1,53 @@
 package ir.samane.homeservicesoft.services;
 
 import ir.samane.homeservicesoft.model.dao.ServiceDao;
+import ir.samane.homeservicesoft.model.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
 import ir.samane.homeservicesoft.model.entity.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class ServiceService {
 
     @Autowired
     ServiceDao serviceDao;
+    private int maxLength = 26;
 
     public void addService(Service service) throws Exception {
-        if (service.getType() == null)
-            throw new Exception("Type can not be null");
-        if (service.getType().getName() == null || service.getType().getName().equals(""))
-            throw new Exception("Type name can not be null");
+        checkNullField(service.getName(), "name");
+        checkServiceType(service.getType());
+        checkNullField(service.getType().getName(), "Type name");
+        checkFieldLength(service.getName(), "name");
+        checkFieldLength(service.getType().getName(), "Type name");
+        checkServiceNameUniqueness(service.getName());
         serviceDao.save(service);
+    }
+
+    public Optional<Service> findByName(String name){
+        return serviceDao.findByName(name);
+    }
+
+    public void checkServiceNameUniqueness(String name) throws Exception {
+        Optional<Service> service = findByName(name);
+        if(service.isPresent())
+            throw new Exception("Service name is duplicated");
+    }
+
+    public void checkFieldLength(String field, String fieldName) throws Exception {
+        if(field.length() > maxLength)
+            throw new Exception("Length of service " + fieldName + " must less than " + maxLength + " characters");
+    }
+
+    public void checkServiceType(Category category) throws Exception {
+        if(category == null)
+            throw new Exception("Service Type can not be null");
+    }
+
+    public void checkNullField(String field, String fieldName) throws Exception {
+        if(field == null || field.equals(""))
+            throw new Exception("Service " + fieldName + " can not be null");
     }
 
     public List<Service> getAllServices() {

@@ -1,11 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: samane
-  Date: 1/1/21
-  Time: 4:57 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,119 +15,245 @@
     <title>title</title>
     <style type="text/css">
         body {
-            background-image: url('a.jpg');
+            background: url('d.png');
         }
     </style>
 </head>
 <body>
-<div>
-    <div style="display: none" id="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-<div class="container" style="width: 30%;margin: 5%;background-image: url('a.jpg')">
-<h2>sign up</h2>
-        <div class="mb-3">
-        <label for="role" class="form-label">Role</label>
-        <select name="role" id="role" class="form-select" aria-label="Default select example" style="color: black">
-            <option value="EXPERT">EXPERT</option>
-            <option value="CUSTOMER">CUSTOMER</option>
-        </select>
-        </div><br>
-        <input style="display: none" type="text" id="id"></td>
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Name">
-        </div><br>
-<div class="mb-3">
-    <label for="family" class="form-label">Family</label>
-    <input type="text" class="form-control" id="family" placeholder="Family">
-</div><br>
-<div class="mb-3">
-<label for="email" class="form-label">Email</label>
-<input type="email" class="form-control" id="email" placeholder="Name@exmaple.com">
-</div><br>
-<div class="mb-3">
-    <label for="Password" class="form-label">Password</label>
-    <input type="Password" class="form-control" id="password" placeholder="Password">
-</div><br>
-<button type="button" id="submit" class="btn btn-primary">Sign Up</button><br>
+<div id="message" style="display: none;justify-content: center;align-items: center;background-color: #dddede;border-color: #868787;width: 85%;height:10%;margin-top: 1%;margin-left: 5%">
 </div>
-<div class="upload-content container" id="imageDiv" style="display: none">
-    <div class="single-upload">
-        <h3>Upload Image</h3>
-        <form id="singleUploadForm" name="singleUploadForm">
-            <div class="form-group">
-            <input id="singleFileUploadInput" type="file" name="file" class="file-input" required />
-            </div><br>
-            <button type="submit" class="primary submit-btn btn btn-primary" style="background-color: #c0c1c1; color: black">Submit</button>
+<div>
+    <div class="container" style="width: 30%;margin: 5%; background-color: #dddede">
+        <h2>Sign Up</h2>
+        <form id="signupForm" onsubmit="return validate()">
+            <input style="display: none" type="text" id="id">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" oninput="checkName()" placeholder="Name" required="true">
+            <div id="nameMessageDiv" style="color: red"></div>
+            <br>
+            <label for="family" class="form-label">Family</label>
+            <input type="text" class="form-control" id="family" oninput="checkFamily()" placeholder="Family" required>
+            <div id="familyMessageDiv" style="color: red"></div>
+            <br>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" oninput="checkEmail()"
+                   placeholder="Name@exmaple.com" required>
+            <div id="emailMessageDiv" style="color: red"></div>
+            <br>
+            <label for="Password" class="form-label">Password</label>
+            <input type="Password" class="form-control" id="password" oninput="checkPassword()"
+                   placeholder="Password" required>
+            <div id="passwordMessageDiv" style="color: red"></div>
+            <br>
+            <label for="role" class="form-label">Role</label>
+            <select name="role" id="role" class="form-select" onchange="showImageDiv(); checkRole()"
+                    aria-label="Default select example" style="color: black" required>
+                <option value="" selected></option>
+                <option value="EXPERT">EXPERT</option>
+                <option value="CUSTOMER">CUSTOMER</option>
+            </select><br><br>
+            <div id="formImageDiv"></div>
+            <button type="submit" id="submit" class="primary btn submit-btn btn-primary"
+                    style="background-color: #6adbbb;border-color: #6adbbb; color: #1f1f1f">Sign Up
+            </button>
+            <br>
         </form>
-        <div class="upload-response">
-            <div id="singleFileUploadError"></div>
-            <div id="singleFileUploadSuccess"></div>
+        <div class="upload-content container" id="imageDiv" style="display: none">
+            <div class="single-upload" id="imageDiv2">
+                <form id="singleUploadForm" name="singleUploadForm" onsubmit="return validate()" method="POST">
+                    <div class="form-group">
+                        <label for="singleFileUploadInput" class="form-label">Upload Image</label>
+                        <input id="singleFileUploadInput" type="file" name="file"
+                               class="file-input" required/>
+                    </div>
+                    <div class="upload-response">
+                        <div id="singleFileUploadError" style="color: red"></div>
+                    </div>
+                    <button type="submit" class="primary btn submit-btn btn-primary" id="submit2"
+                            style="background-color: #6adbbb;border-color: #6adbbb; color: #1f1f1f">Sign Up
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-</div>
 </body>
 <script>
-
-    $("#submit").click(function(){
-        var userdata = {};
-        userdata["role"] = $("#role").val();
-        if(userdata["role"] === "EXPERT"){
-            $("#imageDiv").show();
-        }else {
-            $("#imageDiv").hide();
+    var flag = true;
+    var expertStatus = false;
+    var boolName = false;
+    var boolFamily = false;
+    var boolEmail = false;
+    var boolPassword = false;
+    var boolRole = false;
+    var temp = false;
+    function showImageDiv() {
+        var role = $("#role").val();
+        if (role === "EXPERT" && flag) {
+            $("#imageDiv2").appendTo($("#formImageDiv"));
+            $("#submit").hide();
+            flag = false;
+        }else if(role === "EXPERT" && !flag){
+            $("#imageDiv2").show();
+            $("#submit").hide();
         }
-        userdata["name"] = $("#name").val();
-        userdata["family"] = $("#family").val();
-        userdata["email"] = $("#email").val();
-        userdata["password"] = $("#password").val();
+        else {
+            $("#imageDiv2").hide();
+            $("#submit").show();
+        }
+    }
+
+    $(document).ready(function () {
+        $("#password").keyup(checkPassword);
+    });
+
+    function checkPassword(){
+        $("#passwordMessageDiv").hide();
+        var password = {};
+        password["input"] = $("#password").val();
+        ajaxCall("/passwordCheck", password, "#password");
+        boolPassword = temp;
+    }
+
+    function checkName(){
+        $("#nameMessageDiv").hide();
+        var name = {};
+        name["input"] = $("#name").val();
+        ajaxCall("/nameCheck", name, "#name");
+        boolName = temp;
+    }
+
+    function checkFamily(){
+        $("#familyMessageDiv").hide();
+        var family = {};
+        family["input"] = $("#family").val();
+        ajaxCall("/nameCheck", family, "#family");
+        boolFamily = temp;
+    }
+
+    function checkEmail(){
+        var email = {};
+        email["input"] = $("#email").val();
+        ajaxCall("/emailCheck", email, "#email");
+        if(temp){
+            emailAjaxCall("/emailCheckUniqueness", email)
+        }else {
+            $("#emailMessageDiv").style.display = "none";
+        }
+        boolEmail = temp;
+    }
+
+    function emailAjaxCall(url, input){
         $.ajax({
-            type : "POST",
-            contentType : "application/json",
-            url : "addUser/" + userdata["role"],
-            data : JSON.stringify(userdata),
-            dataType : 'json',
-            success : function(data) {
-                $("#id").val(data.id);
-                $("#alert").innerHTML = data.message;
-                $("#alert").show();
+            type: "POST",
+            contentType: "application/json",
+            url: url,
+            data: JSON.stringify(input),
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#emailMessageDiv").hide();
+                temp = true;
+            },
+            error: function (error) {
+                if(error.responseText.includes("not")){
+                    $("#emailMessageDiv").hide();
+                    temp = true;
+                }else {
+                    temp = false;
+                    $("#emailMessageDiv").show();
+                    $("#emailMessageDiv").html((error.responseText) ||
+                        "Some Error Occurred");
+                }
+
             }
         });
-    });
-    var singleUploadForm = document.querySelector('#singleUploadForm');
-    var singleFileUploadInput = document.querySelector('#singleFileUploadInput');
-    var singleFileUploadError = document.querySelector('#singleFileUploadError');
-    var singleFileUploadSuccess = document.querySelector('#singleFileUploadSuccess');
-
-    function uploadSingleFile(file) {
-        var formData = new FormData();
-        formData.append("file", file);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/uploadFile/" + $("#id").val());
-
-        xhr.onload = function() {
-            console.log(xhr.responseText);
-            var response = JSON.parse(xhr.responseText);
-            if(xhr.status == 200) {
-                singleFileUploadError.style.display = "none";
-                singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='" + response.fileDownloadUri + "' target='_blank'>" + response.fileDownloadUri + "</a></p>";
-                singleFileUploadSuccess.style.display = "block";
-            } else {
-                singleFileUploadSuccess.style.display = "none";
-                singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
-            }
-        }
-
-        xhr.send(formData);
     }
+
+    function checkRole(){
+        if($("#role").val() === ""){
+            boolRole = false;
+        }else {
+            boolRole = true;
+        }
+    }
+
+    function ajaxCall(url, input, id){
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: url,
+            data: JSON.stringify(input),
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if(!data){
+                    temp = false;
+                    $(id).css("border-color", "red");
+                }else{
+                    $(id).css("border-color", "green");
+                    temp = true;
+                }
+            }
+        });
+    }
+
+    $("#signupForm").submit(function (event) {
+        if(boolRole && boolEmail && boolFamily && boolName && boolPassword) {
+            var userdata = {};
+            userdata["role"] = $("#role").val();
+            userdata["name"] = $("#name").val();
+            userdata["family"] = $("#family").val();
+            userdata["email"] = $("#email").val();
+            userdata["password"] = $("#password").val();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "addUser/" + userdata["role"],
+                data: JSON.stringify(userdata),
+                dataType: 'json',
+                success: function (data) {
+                    $("#id").val(data.id);
+                    showSuccessMessage(data);
+                }
+            });
+            event.preventDefault();
+        }
+    });
+
+    var singleFileUploadError = document.querySelector('#singleFileUploadError');
+
     $('#singleUploadForm').submit(function(event) {
-        var formElement = this;
-        var formData = new FormData(formElement);
+        if(boolRole && boolEmail && boolFamily && boolName && boolPassword) {
+            var formElement = this;
+            var formData = new FormData(formElement);
+            var userdata = {};
+            userdata["role"] = $("#role").val();
+            userdata["name"] = $("#name").val();
+            userdata["family"] = $("#family").val();
+            userdata["email"] = $("#email").val();
+            userdata["password"] = $("#password").val();
+            if (!expertStatus) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "addUser/" + userdata["role"],
+                    data: JSON.stringify(userdata),
+                    dataType: 'json',
+                    success: function (data) {
+                        expertStatus = true;
+                        $("#id").val(data.id);
+                        imageAjaxCall(formData);
+                    }
+                });
+            } else {
+                imageAjaxCall(formData);
+            }
+            event.preventDefault();
+        }
+    });
+
+    function imageAjaxCall(formData){
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -143,13 +263,60 @@
             contentType: false,
             success: function (response) {
                 console.log(response);
+                showSuccessMessage(response);
+                expertStatus = false;
+                singleFileUploadError.style.display = "none";
             },
             error: function (error) {
                 console.log(error);
+                singleFileUploadError.style.display = "block";
+                singleFileUploadError.innerHTML = (error.responseText) ||
+                    "Some Error Occurred";
             }
         });
+    }
 
-        event.preventDefault();
-    });
+    function showSuccessMessage(response){
+        if(response.id !== 0) {
+            $("#message").html("<span><h4><strong>Welcome!</strong> Your information is registered successfully, please check your email and click the\n" +
+                "        the link to complete your registration!</h4></span>");
+        }else {
+            $("#message").html("<span><h4>"+ response.message + "</h4></span>");
+        }
+        $("#message").css('display', 'flex');
+        hideMessage();
+    }
+
+    function hideMessage() {
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+    }
+
+    function validate(){
+        if(boolRole && boolEmail && boolFamily && boolName && boolPassword){
+            return true;
+        }
+        if(!boolName){
+            //$("#name").focus();
+            $("#nameMessageDiv").show();
+            $("#nameMessageDiv").html("Length must be 2-16 characters");
+            return false;
+        }else if(!boolFamily){
+            $("#family").focus();
+            $("#familyMessageDiv").show();
+            $("#familyMessageDiv").html("Length must be 2-16 characters");
+        }else if(!boolEmail){
+            $("#email").focus();
+        }else if(!boolPassword){
+            $("#password").focus();
+            $("#passwordMessageDiv").show();
+            $("#passwordMessageDiv").html("Password must contains words and numbers");
+        }else if(!boolRole){
+            $("#role").focus();
+        }
+        return false;
+    }
+
 </script>
 </html>

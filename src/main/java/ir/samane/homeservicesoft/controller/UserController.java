@@ -1,9 +1,9 @@
 package ir.samane.homeservicesoft.controller;
 
 import ir.samane.homeservicesoft.dto.MessageDto;
+import ir.samane.homeservicesoft.dto.InputDto;
 import ir.samane.homeservicesoft.model.entity.Customer;
 import ir.samane.homeservicesoft.model.entity.Expert;
-import ir.samane.homeservicesoft.model.entity.User;
 import ir.samane.homeservicesoft.services.ConfirmationTokenService;
 import ir.samane.homeservicesoft.services.CustomerService;
 import ir.samane.homeservicesoft.services.ExpertService;
@@ -68,19 +68,29 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/passwordCheck", method = RequestMethod.POST)
+    public ResponseEntity checkPassword(@RequestBody InputDto inputDto) {
+       return ResponseEntity.ok(userService.checkPassword(inputDto.getInput()));
+    }
 
+    @RequestMapping(value = "/nameCheck", method = RequestMethod.POST)
+    public ResponseEntity checkName(@RequestBody InputDto inputDto) {
+        return ResponseEntity.ok(userService.checkNameLength(inputDto.getInput()));
+    }
 
-//    @PostMapping(value = "/lo",consumes = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-//    public ResponseEntity registerStudent(@RequestBody User user){
-//        userService.registerUser(user);
-//        return ResponseEntity.ok("New User with " + user.getEmail() + " is added!");
-//    }
-//
-//    @PostMapping
-//    @ResponseBody
-//    public ResponseEntity saveAdmin(@RequestBody User user){
-//                userService.registerUser(user);
-//                return ResponseEntity.ok("New Admin with " + user.getEmail() + " is added!");
-//    }
+    @RequestMapping(value = "/emailCheck", method = RequestMethod.POST)
+    public ResponseEntity checkEmail(@RequestBody InputDto inputDto) {
+        return ResponseEntity.ok(userService.checkEmail(inputDto.getInput()));
+    }
+
+    @RequestMapping(value = "/emailCheckUniqueness", method = RequestMethod.POST)
+    public ResponseEntity checkEmailUniqueness(@RequestBody InputDto inputDto) {
+        try {
+            String message = userService.checkEmailUniqueness(inputDto.getInput());
+            return ResponseEntity.ok(message);
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
 }

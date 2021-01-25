@@ -18,6 +18,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public interface SubServiceDao extends JpaRepository<SubService, Integer>, JpaSpecificationExecutor<SubService> {
@@ -26,6 +27,8 @@ public interface SubServiceDao extends JpaRepository<SubService, Integer>, JpaSp
     List<SubService> findByExpert(@Param("expert")Expert expert);
 
     List<SubService> findByService(Service service);
+
+    Optional<SubService> findByName(String name);
 
     static Specification<SubService> findBy(String serviceName, String subServiceName) {
         return (Specification<SubService>) (root, criteriaQuery, criteriaBuilder) -> {
@@ -44,6 +47,4 @@ public interface SubServiceDao extends JpaRepository<SubService, Integer>, JpaSp
         };
     }
 
-//    @Query("select subService.experts from SubService subService join fetch subService.experts where subService.id = :id")
-//    List<Expert> getExpertsOfSubService(@Param("id")int id);
 }

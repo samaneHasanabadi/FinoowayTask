@@ -26,6 +26,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private int maxNameLength = 16;
+    private int minNameLength = 2;
+
     public UserService() {
 
     }
@@ -43,20 +46,64 @@ public class UserService implements UserDetailsService {
         return flag;
     }
 
-    public Boolean passwordCheck(String password) {
-        return Pattern.matches("[a-zA-Z_0-9!-)]{8,}", password);
+    public Boolean checkPassword(String password) {
+        return Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z_0-9]{8,}$", password);
+    }
+
+    public void checkPasswordFormat(String password) throws Exception {
+        if(!checkPassword(password)){
+            throw new Exception("Password must contains words and numbers and at least 8 characters");
+        }
+    }
+
+    public boolean checkNameLength(String name) {
+        boolean flag = false;
+        if (name.length() <= maxNameLength && name.length() >= minNameLength)
+            flag = true;
+        return flag;
+    }
+
+    public String checkEmailUniqueness(String email) throws Exception {
+        boolean emailExistence = findByEmail(email);
+        if(!emailExistence){
+            throw new Exception("This email is used before");
+        }
+        return "email is not used before";
+    }
+
+    public boolean checkEmail(String email){
+        return Pattern.matches("^.+@.+\\..+$", email);
+    }
+
+    public void checkEmailFormat(String email) throws Exception {
+        if(!checkEmail(email))
+            throw new Exception("Email is in incorrect format");
+    }
+
+    public void checkUserField(String field, String fieldName) throws Exception {
+        checkNullField(field, fieldName);
+        if(!checkNameLength(field))
+            throw new Exception("User "+fieldName+" length must be between " + minNameLength + " and " +
+                    maxNameLength + " characters");
+    }
+
+    public void checkNullField(String field, String fieldName) throws Exception {
+        if(field == null)
+            throw new Exception("User "+fieldName+" can not be null");
     }
 
     public User registerUser(User user) throws Exception {
-        User save = null;
-        if (findByEmail(user.getEmail()) && passwordCheck(user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            save = userDao.save(user);
-        } else if (!findByEmail(user.getEmail()))
-            throw new Exception("Email is used before");
-        else if (!passwordCheck(user.getPassword()))
-            throw new Exception("Password is in incorrect format");
-        return save;
+        checkUserField(user.getName(), "name");
+        checkUserField(user.getFamily(), "family");
+        checkNullField(user.getEmail(), "email");
+        checkNullField(user.getRole().toString(), "role");
+        checkNullField(user.getPassword(), "password");
+        checkEmailFormat(user.getEmail());
+        checkEmailUniqueness(user.getEmail());
+        checkPasswordFormat(user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = userDao.save(user);
+        return savedUser;
     }
 
     @Override
