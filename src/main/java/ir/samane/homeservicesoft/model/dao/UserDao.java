@@ -21,7 +21,7 @@ public interface UserDao extends JpaRepository<User, Integer> , JpaSpecification
 
     Optional<User> findByEmail(String email);
 
-    User findById(int id);
+    Optional<User> findById(int id);
 
     static Specification<Expert> findBy(UserDto userDto) {
         return (Specification<Expert>) (root, criteriaQuery, criteriaBuilder) -> {

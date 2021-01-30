@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,120 +15,263 @@
     <title>title</title>
 </head>
 <body>
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" style="background-color: #dddede; border-color: #dddede ">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Manager Page</a>
+            <a class="navbar-brand" href="#" style="color: #1f1f1f">Manager Page</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="ServicePage">Service Page</a></li>
-            <li class="active"><a href="ExpertPage">Expert Page</a></li>
-            <li><a href="SearchPage">Search Page</a></li>
+            <li><a href="ServicePage" style="color: #1f1f1f;">Service Page</a>
+            </li>
+            <li class="active"><a href="ExpertPage" style="color: #1f1f1f; background-color: #6adbbb">Expert Page</a>
+            </li>
+            <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+            <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
         </ul>
     </div>
 </nav>
+<div id="message" class="well well-large"
+     style="display: none;justify-content: center;align-items: center;background-color: #f1d548;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
+</div>
 <div style="display: flex; flex-direction: row">
     <div class="vertical-menu">
-        <a href="ExpertPage" class="active">Add Service</a>
-        <a href="ShowExpertPage">Show Services</a>
+        <a href="ExpertPage" class="active">Add Expert</a>
+        <a href="ShowExpertPage">Show Experts</a>
     </div>
-<div style="width: 40%; margin: 5%">
-    <h3>Add Expert</h3>
-    <div>
-<form id="addExpert" method="post">
-    <div style="display: none">
-    <label for="id">id</label>
-    <input type="text" name="id" id="id">
-    </div>
-    <div class="mb-3">
-    <label for="name" class="form-label">name</label>
-    <input type="text" name="name" id="name" class="form-control">
-    </div>
-    <div class="mb-3">
-    <label for="family" class="form-label">family</label>
-    <input type="text" name="family" id="family" class="form-control">
-    </div>
-    <div class="mb-3">
-    <label for="email" class="form-label">email</label>
-    <input type="email" name="email" id="email" class="form-control">
-    </div>
-    <div class="mb-3">
-    <label for="password" class="form-label">password</label>
-    <input type="password" name="password" id="password" class="form-control">
-    </div>
-    <input type="submit" class="btn btn-primary" id="submit" value="Add Expert">
-</form>
-    </div>
-<div class="upload-content" id="imageDiv">
-    <div class="single-upload">
-        <h3>Upload Image</h3>
-        <form id="singleUploadForm" name="singleUploadForm">
-            <input id="singleFileUploadInput" type="file" name="file" class="file-input" required />
-            <button type="submit" class="primary submit-btn">Submit</button>
-        </form>
-        <div class="upload-response">
-            <div id="singleFileUploadError"></div>
-            <div id="singleFileUploadSuccess"></div>
+    <div style="width: 80%; display: flex; flex-direction: row;">
+        <div class="container" style="width: 50%;margin: 3%; background-color: #dddede">
+            <h4><strong>Add Expert</strong></h4>
+            <form id="signupForm" onsubmit="return validate()">
+                <input style="display: none" type="text" id="id">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" oninput="checkName()" placeholder="Name"
+                       required="true">
+                <div id="nameMessageDiv" style="color: red"></div>
+                <br>
+                <label for="family" class="form-label">Family</label>
+                <input type="text" class="form-control" id="family" oninput="checkFamily()" placeholder="Family"
+                       required>
+                <div id="familyMessageDiv" style="color: red"></div>
+                <br>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" oninput="checkEmail()"
+                       placeholder="Name@exmaple.com" required>
+                <div id="emailMessageDiv" style="color: red"></div>
+                <br>
+                <label for="Password" class="form-label">Password</label>
+                <input type="Password" class="form-control" id="password" oninput="checkPassword()"
+                       placeholder="Password" required>
+                <div id="passwordMessageDiv" style="color: red"></div>
+                <br>
+                <label for="role" class="form-label">Role</label>
+                <select name="role" id="role" class="form-select" onchange="showImageDiv(); checkRole()"
+                        aria-label="Default select example" style="color: black" required disabled>
+                    <option value="EXPERT" selected>EXPERT</option>
+                </select><br>
+                <div id="formImageDiv" style="display: none"></div>
+                <button type="submit" id="submit" class="primary btn submit-btn btn-primary"
+                        style="display:none;background-color: #6adbbb;border-color: #6adbbb; color: #1f1f1f">Sign Up
+                </button>
+            </form>
+            <div class="upload-content container" id="imageDiv">
+                <div class="single-upload" id="imageDiv2">
+                    <form id="singleUploadForm" name="singleUploadForm" onsubmit="return validate()" method="POST">
+                        <div class="form-group">
+                            <label for="singleFileUploadInput" class="form-label">Upload Image</label>
+                            <input id="singleFileUploadInput" type="file" name="file"
+                                   class="file-input" required/>
+                        </div>
+                        <div class="upload-response">
+                            <div id="singleFileUploadError" style="color: red"></div>
+                        </div>
+                        <button type="submit" class="primary btn submit-btn btn-primary" id="submit2"
+                                style="background-color: #6adbbb;border-color: #6adbbb; color: #1f1f1f">Sign Up
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-</div>
-</div>
 </body>
 <script>
-    $('#addExpert').submit(function(event) {
-        var userdata = {};
-        userdata["role"] = "EXPERT";
-        userdata["name"] = $("#name").val();
-        userdata["family"] = $("#family").val();
-        userdata["email"] = $("#email").val();
-        userdata["password"] = $("#password").val();
+    var flag = true;
+    var expertStatus = false;
+    var boolName = false;
+    var boolFamily = false;
+    var boolEmail = false;
+    var boolPassword = false;
+    var boolRole = true;
+    var temp = false;
+
+    function showImageDiv() {
+        var role = $("#role").val();
+        if (role === "EXPERT" && flag) {
+            $("#imageDiv2").appendTo($("#formImageDiv"));
+            $("#submit").hide();
+            flag = false;
+        } else if (role === "EXPERT" && !flag) {
+            $("#imageDiv2").show();
+            $("#submit").hide();
+        } else {
+            $("#imageDiv2").hide();
+            $("#submit").show();
+        }
+    }
+
+    $(document).ready(function () {
+        $("#password").keyup(checkPassword);
+    });
+
+    function checkPassword() {
+        $("#passwordMessageDiv").hide();
+        var password = {};
+        password["input"] = $("#password").val();
+        ajaxCall("/passwordCheck", password, "#password");
+        boolPassword = temp;
+    }
+
+    function checkName() {
+        $("#nameMessageDiv").hide();
+        var name = {};
+        name["input"] = $("#name").val();
+        ajaxCall("/nameCheck", name, "#name");
+        boolName = temp;
+    }
+
+    function checkFamily() {
+        $("#familyMessageDiv").hide();
+        var family = {};
+        family["input"] = $("#family").val();
+        ajaxCall("/nameCheck", family, "#family");
+        boolFamily = temp;
+    }
+
+    function checkEmail() {
+        var email = {};
+        email["input"] = $("#email").val();
+        ajaxCall("/emailCheck", email, "#email");
+        if (temp) {
+            emailAjaxCall("/emailCheckUniqueness", email)
+        } else {
+            $("#emailMessageDiv").style.display = "none";
+        }
+        boolEmail = temp;
+    }
+
+    function emailAjaxCall(url, input) {
         $.ajax({
-            type : "POST",
-            contentType : "application/json",
-            url : "/addExpert",
-            data : JSON.stringify(userdata),
-            dataType : 'json',
-            success : function(data) {
-                $("#id").val(data);
+            type: "POST",
+            contentType: "application/json",
+            url: url,
+            data: JSON.stringify(input),
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#emailMessageDiv").hide();
+                temp = true;
+            },
+            error: function (error) {
+                if (error.responseText.includes("not")) {
+                    $("#emailMessageDiv").hide();
+                    temp = true;
+                } else {
+                    temp = false;
+                    $("#emailMessageDiv").show();
+                    $("#emailMessageDiv").html((error.responseText) ||
+                        "Some Error Occurred");
+                }
+
             }
         });
-        event.preventDefault();
-    });
-    var singleUploadForm = document.querySelector('#singleUploadForm');
-    var singleFileUploadInput = document.querySelector('#singleFileUploadInput');
-    var singleFileUploadError = document.querySelector('#singleFileUploadError');
-    var singleFileUploadSuccess = document.querySelector('#singleFileUploadSuccess');
-
-    function uploadSingleFile(file) {
-        var formData = new FormData();
-        formData.append("file", file);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/uploadFile/" + $("#id").val());
-
-        xhr.onload = function() {
-            console.log(xhr.responseText);
-            var response = JSON.parse(xhr.responseText);
-            if(xhr.status == 200) {
-                singleFileUploadError.style.display = "none";
-                singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='" + response.fileDownloadUri + "' target='_blank'>" + response.fileDownloadUri + "</a></p>";
-                singleFileUploadSuccess.style.display = "block";
-            } else {
-                singleFileUploadSuccess.style.display = "none";
-                singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
-            }
-        }
-
-        xhr.send(formData);
     }
-    $('#singleUploadForm').submit(function(event) {
-        var formElement = this;
-        var formData = new FormData(formElement);
 
+    function checkRole() {
+        if ($("#role").val() === "") {
+            boolRole = false;
+        } else {
+            boolRole = true;
+        }
+    }
+
+    function ajaxCall(url, input, id) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: url,
+            data: JSON.stringify(input),
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if (!data) {
+                    temp = false;
+                    $(id).css("border-color", "red");
+                } else {
+                    $(id).css("border-color", '#dddede');
+                    temp = true;
+                }
+            }
+        });
+    }
+
+    $("#signupForm").submit(function (event) {
+        if (boolRole && boolEmail && boolFamily && boolName && boolPassword) {
+            var userdata = {};
+            userdata["role"] = $("#role").val();
+            userdata["name"] = $("#name").val();
+            userdata["family"] = $("#family").val();
+            userdata["email"] = $("#email").val();
+            userdata["password"] = $("#password").val();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "addUser/" + userdata["role"],
+                data: JSON.stringify(userdata),
+                dataType: 'json',
+                success: function (data) {
+                    $("#id").val(data.id);
+                    showSuccessMessage(data);
+                }
+            });
+            event.preventDefault();
+        }
+    });
+
+    var singleFileUploadError = document.querySelector('#singleFileUploadError');
+
+    $('#singleUploadForm').submit(function (event) {
+        if (boolRole && boolEmail && boolFamily && boolName && boolPassword) {
+            var formElement = this;
+            var formData = new FormData(formElement);
+            var userdata = {};
+            userdata["role"] = $("#role").val();
+            userdata["name"] = $("#name").val();
+            userdata["family"] = $("#family").val();
+            userdata["email"] = $("#email").val();
+            userdata["password"] = $("#password").val();
+            if (!expertStatus) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "/addExpert",
+                    data: JSON.stringify(userdata),
+                    dataType: 'json',
+                    success: function (data) {
+                        expertStatus = true;
+                        $("#id").val(data.id);
+                        imageAjaxCall(formData);
+                    }
+                });
+            } else {
+                imageAjaxCall(formData);
+            }
+            event.preventDefault();
+        }
+    });
+
+    function imageAjaxCall(formData) {
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -139,34 +281,83 @@
             contentType: false,
             success: function (response) {
                 console.log(response);
+                showSuccessMessage(response);
+                expertStatus = false;
+                singleFileUploadError.style.display = "none";
             },
             error: function (error) {
                 console.log(error);
+                singleFileUploadError.style.display = "block";
+                singleFileUploadError.innerHTML = (error.responseText) ||
+                    "Some Error Occurred";
             }
         });
-        event.preventDefault();
-    });
+    }
+
+    function showSuccessMessage(response) {
+        if (response.id !== 0) {
+            $("#message").html("<span><h4><strong>Expert is added successfully!</strong></h4></span>");
+        } else {
+            $("#message").html("<span><h4>" + response.message + "</h4></span>");
+        }
+        $("#message").css('display', 'flex');
+        hideMessage();
+    }
+
+    function hideMessage() {
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+    }
+
+    function validate() {
+        if (boolRole && boolEmail && boolFamily && boolName && boolPassword) {
+            return true;
+        }
+        if (!boolName) {
+            //$("#name").focus();
+            $("#nameMessageDiv").show();
+            $("#nameMessageDiv").html("Length must be 2-16 characters");
+            return false;
+        } else if (!boolFamily) {
+            $("#family").focus();
+            $("#familyMessageDiv").show();
+            $("#familyMessageDiv").html("Length must be 2-16 characters");
+        } else if (!boolEmail) {
+            $("#email").focus();
+        } else if (!boolPassword) {
+            $("#password").focus();
+            $("#passwordMessageDiv").show();
+            $("#passwordMessageDiv").html("Password must contains words and numbers");
+        } else if (!boolRole) {
+            $("#role").focus();
+        }
+        return false;
+    }
+
 </script>
 <style>
     .vertical-menu {
-        width: 20%; /* Set a width if you like */
+        width: 20%;
+        background: url("/878.png");
+        background-repeat: no-repeat;
+        background-position: center;
     }
 
     .vertical-menu a {
-        background-color: #eee; /* Grey background color */
-        color: black; /* Black text color */
-        display: block; /* Make the links appear below each other */
-        padding: 12px; /* Add some padding */
-        text-decoration: none; /* Remove underline from links */
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 12px;
+        text-decoration: none;
     }
 
     .vertical-menu a:hover {
-        background-color: #ccc; /* Dark grey background on mouse-over */
+        background-color: #dddede;
     }
 
     .vertical-menu a.active {
-        background-color: #163bc1; /* Add a green color to the "active/current" link */
-        color: white;
+        background-color: #6adbbb;
     }
 </style>
 </html>

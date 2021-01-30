@@ -27,12 +27,12 @@
             <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+            <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
         </ul>
     </div>
 </nav>
 <div id="message"
-     style="display: none;justify-content: center;align-items: center;background-color: #dddede;border-color: #868787;width: 85%;height:10%;margin-top: 1%;margin-left: 5%">
+     style="display: none;justify-content: center;align-items: center;background-color: #f1d548;border-color: #868787;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
 </div>
 <div style="display: flex; flex-direction: row; height: 89%">
     <div class="vertical-menu">
@@ -111,7 +111,9 @@
 <style>
     .vertical-menu {
         width: 20%;
-        background-image: url("878.png");
+        background: url("/878.png");
+        background-repeat: no-repeat;
+        background-position: center;
     }
 
     .vertical-menu a {

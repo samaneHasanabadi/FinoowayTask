@@ -21,7 +21,9 @@ public class User {
     private String family;
     private String email;
     private String password;
+    @Enumerated(value = EnumType.STRING)
     private Role role;
+    @Enumerated(value = EnumType.STRING)
     private RegisterStatus status;
 
     public User() {
@@ -61,6 +63,10 @@ public class User {
 
     public Role getRole() {
         return role;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setRole(Role role) {

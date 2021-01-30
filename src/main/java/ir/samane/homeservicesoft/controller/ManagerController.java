@@ -1,5 +1,6 @@
 package ir.samane.homeservicesoft.controller;
 
+import ir.samane.homeservicesoft.dto.MessageDto;
 import ir.samane.homeservicesoft.dto.UserDto;
 import ir.samane.homeservicesoft.facade.ManagerFacade;
 import ir.samane.homeservicesoft.model.entity.Expert;
@@ -43,12 +44,16 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/addExpert", method = RequestMethod.POST)
-    public ResponseEntity registerExpert(@RequestBody Expert expert) {
+    public @ResponseBody MessageDto registerExpert(@RequestBody Expert expert) {
+        MessageDto messageDto = new MessageDto();
         try {
             expert = managerFacade.addExpert(expert);
-            return ResponseEntity.ok(expert.getId());
+            messageDto.setId(expert.getId());
+            messageDto.setMessage("Expert with name "+ expert.getName() + " " + expert.getFamily() + " is added");
+            return messageDto;
         }catch (Exception exception){
-            return ResponseEntity.ok(exception.getMessage());
+            messageDto.setMessage(exception.getMessage());
+            return messageDto;
         }
     }
 

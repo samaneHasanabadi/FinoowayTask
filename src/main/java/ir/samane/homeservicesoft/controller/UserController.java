@@ -4,6 +4,8 @@ import ir.samane.homeservicesoft.dto.MessageDto;
 import ir.samane.homeservicesoft.dto.InputDto;
 import ir.samane.homeservicesoft.model.entity.Customer;
 import ir.samane.homeservicesoft.model.entity.Expert;
+import ir.samane.homeservicesoft.model.entity.Service;
+import ir.samane.homeservicesoft.model.entity.User;
 import ir.samane.homeservicesoft.services.ConfirmationTokenService;
 import ir.samane.homeservicesoft.services.CustomerService;
 import ir.samane.homeservicesoft.services.ExpertService;
@@ -27,6 +29,11 @@ public class UserController {
 
     @GetMapping("/login")
     private String getLoginPage(){
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    private String getLoginOutPage(){
         return "login";
     }
 
@@ -90,6 +97,37 @@ public class UserController {
             return ResponseEntity.ok(message);
         }catch (Exception e){
             return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/editExpert/{email}")
+    public ResponseEntity editService(@RequestBody Expert user, @PathVariable("email") String email) {
+        try {
+            userService.editUser(user, email);
+            return ResponseEntity.ok("expert " + user.getName() + " " + user.getFamily() + " is edited!");
+        } catch (Exception exception) {
+            System.out.println(exception.getStackTrace());
+            return ResponseEntity.status(400).body(exception.getMessage());
+        }
+    }
+
+    @PostMapping("/checkEditEmailUniqueness/{email}")
+    public ResponseEntity checkEditEmailUniqueness(@RequestBody InputDto inputDto, @PathVariable("email") String email){
+        try {
+            userService.checkEditEmailUniqueness(inputDto.getInput(), email);
+            return ResponseEntity.ok("user email looks good!");
+        } catch (Exception exception) {
+            return ResponseEntity.status(400).body(exception.getMessage());
+        }
+    }
+
+    @DeleteMapping("/deleteUserBydId/{id}")
+    public ResponseEntity deleteBydId(@PathVariable("id") int id){
+        try {
+            userService.deleteById(id);
+            return ResponseEntity.ok("user is deleted successfully!");
+        } catch (Exception exception) {
+            return ResponseEntity.status(400).body(exception.getMessage());
         }
     }
 

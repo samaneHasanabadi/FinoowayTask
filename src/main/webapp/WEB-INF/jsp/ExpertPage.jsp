@@ -19,58 +19,98 @@
     <!--link rel="stylesheet" href="CssConfig.css"-->
     <title>title</title>
 </head>
-<body>
-
-<h3>Search And Add Sub Service</h3>
-<div style="width: 40%;margin: 3%">
-    <form id="SearchService">
-        <div class="mb-3">
-            <label for="serviceName" class="form-label">Service Name</label>
-            <input name="name" class="form-control" id="serviceName">
-        </div><br>
-        <div class="mb-3">
-            <label for="subServiceName" class="form-label">Sub Service Name</label>
-            <input name="type" class="form-control" id="subServiceName">
-        </div><br>
-    </form>
-    <div>
-        <button class="btn btn-success" id="searchSubmit">Search</button>
+<body onload="getUserData()">
+<nav class="navbar navbar-inverse" style="background-color: #dddede; border-color: #dddede ">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#" style="color: #1f1f1f">Expert Page</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="ServicePage" style="color: #1f1f1f; background-color: #f1d548">Sub Service
+                Page</a>
+            </li>
+            <li><a href="ExpertPage" style="color: #1f1f1f;">Expert Page</a></li>
+            <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+        </ul>
+    </div>
+</nav>
+<div id="message" class="well well-large"
+     style="display: none;justify-content: center;align-items: center;background-color: #f1d548;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
+</div>
+<div style="margin: 2%">
+    <div class="well well-large" style="width: 40%;margin: 3%">
+        <div style="justify-content: center"><h4><strong>Search And Add Sub Service</strong></h4></div>
+        <div>
+            <form id="SearchService">
+                <div class="mb-3">
+                    <label for="serviceName" class="form-label">Service Name</label>
+                    <input name="name" class="form-control" id="serviceName">
+                </div>
+                <br>
+                <div class="mb-3">
+                    <label for="subServiceName" class="form-label">Sub Service Name</label>
+                    <input name="type" class="form-control" id="subServiceName">
+                </div>
+                <br>
+            </form>
+            <div>
+                <button class="btn btn-success" id="searchSubmit"
+                        style="background-color: #f1d548; border-color: #f1d548; color: #1f1f1f">Search
+                </button>
+            </div>
+        </div>
+    </div>
+    <div style="display: none" id="divTable" class="well well-large">
+        <h3>Result Of Search</h3>
+        <table class="table table-striped" id="searchTable">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Service</th>
+                <th scope="col">Sub Service</th>
+                <th scope="col">Add Sub Service</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="well well-large">
+        <button type="button" class="btn btn-primary" id="showServiceBtn" onclick="showServices()"
+                style="background-color: #f1d548; border-color: #f1d548; color: #1f1f1f">Show Services
+        </button>
+        <div style="justify-content: center"><h4><strong>List Of Services</strong></h4></div>
+        <table class="table table-striped" id="serviceTable">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Service</th>
+                <th scope="col">Sub Service</th>
+                <th scope="col">Remove Sub Service</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
-<div style="display: none" id="divTable">
-    <h3>Result Of Search</h3>
-    <table class="table table-striped" id="searchTable">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Service</th>
-            <th scope="col">Sub Service</th>
-            <th scope="col">Add Sub Service</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
-</div>
-
-<button type="button" class="btn btn-primary" id="showServiceBtn" onclick="showServices()">Show Services</button>
-<h3>List Of Services</h3>
-<table class="table table-striped" id="serviceTable">
-    <thead class="thead-light">
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Service</th>
-        <th scope="col">Sub Service</th>
-        <th scope="col">Remove Sub Service</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
 </body>
 <script>
-    $("#searchSubmit").on('click', function (){
+    var expertId = 0;
+    function getUserData() {
+        $.ajax({
+            type: "GET",
+            url: "/getUserId",
+            success: function (data2) {
+                expertId = data2;
+            }
+        });
+    }
+
+    $("#searchSubmit").on('click', function () {
         $("#divTable").show();
         $("#searchTable tr:gt(0)").remove();
         var searchData = {};
@@ -79,11 +119,11 @@
         var array = [];
         var len = 0;
         $.ajax({
-            type : "POST",
-            contentType : "application/json",
-            url : "findByServiceNameAndSubServiceName",
-            data : JSON.stringify(searchData),
-            dataType : 'json',
+            type: "POST",
+            contentType: "application/json",
+            url: "/findByServiceNameAndSubServiceName",
+            data: JSON.stringify(searchData),
+            dataType: 'json',
             success: function (data2) {
                 $.each(data2, function (i, f) {
                     var length = 0;
@@ -91,21 +131,11 @@
                         array[len] = f.service.name;
                         len++;
                         var row = "";
-                        var flag = true;
                         $.each(data2, function (i2, f2) {
-                            if (f2.service.name === f.service.name) {
-                                length++;
-                                if (flag) {
-                                    flag = false;
-                                    row = row + "<td>" + f2.name + "</td><td><div class=\"form-check\">" +
-                                        "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id='checkBox "+f2.service.id+" "+f2.id+"' onclick='addSubService(id)'></div></td></tr>";
-                                } else {
-                                    row = row + "<tr><td>" + f2.name + "</td><td><div class=\"form-check\">" +
-                                        "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id='checkBox "+f2.service.id+" "+f2.id+"' onclick='addSubService(id)'></div></td></tr>";
-                                }
-                            }
+                            row = row + "<tr><th scope=\"row\">" + (i2 + 1) + "</th><td>" + f.service.name + "</td>";
+                            row = row + "<td>" + f2.name + "</td><td><div class=\"form-check\">" +
+                                "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id='checkBox " + f2.service.id + " " + f2.id + "' onclick='addSubService(id)'></div></td></tr>";
                         });
-                        row = "<tr><th scope=\"row\" rowspan='" + length + "'>" + len + "</th><td rowspan='" + length + "'>" + f.service.name + "</td>" + row;
                         $("#searchTable").append(row);
                     }
                 });
@@ -113,7 +143,6 @@
         });
     });
 
-    var expertId = 1;
     function showServices() {
         $("#serviceTable tr:gt(0)").remove();
         var array = [];
@@ -124,26 +153,15 @@
                 url: "/getSubServicesOfExpert/" + expertId,
                 success: function (data2) {
                     $.each(data2, function (i, f) {
-                        var length = 0;
                         if (!array.includes(f.service.name)) {
                             array[len] = f.service.name;
                             len++;
                             var row = "";
-                            var flag = true;
                             $.each(data2, function (i2, f2) {
-                                if (f2.service.name === f.service.name) {
-                                    length++;
-                                    if (flag) {
-                                        flag = false;
-                                        row = row + "<td>" + f2.name + "</td><td><div class=\"form-check\">" +
-                                            "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id='checkBox " + f2.service.id + " " + f2.id + "' onclick='removeSubService(id)' checked></div></td></tr>";
-                                    } else {
-                                        row = row + "<tr><td>" + f2.name + "</td><td><div class=\"form-check\">" +
-                                            "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id='checkBox " + f2.service.id + " " + f2.id + "' onclick='removeSubService(id)' checked></div></td></tr>";
-                                    }
-                                }
+                                row = row + "<tr><th scope=\"row\">" + (i2 + 1) + "</th><td>" + f.service.name + "</td>";
+                                row = row + "<td>" + f2.name + "</td><td><div class=\"form-check\">" +
+                                    "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id='checkBox " + f2.service.id + " " + f2.id + "' onclick='removeSubService(id)' checked></div></td></tr>";
                             });
-                            row = "<tr><th scope=\"row\" rowspan='" + length + "'>" + len + "</th><td rowspan='" + length + "'>" + f.service.name + "</td>" + row;
                             $("#serviceTable").append(row);
                         }
                     });
@@ -151,32 +169,48 @@
             });
         });
     }
-    function removeSubService(id){
+
+    function removeSubService(id) {
         var parts = id.toString().split(" ");
         var subServiceId = parts[2];
         $.ajax({
             type: "GET",
-            url: "/removeExpertOfSubService/" +expertId +"/"+ subServiceId,
+            url: "/removeExpertOfSubService/" + expertId + "/" + subServiceId,
             success: function () {
                 $(function () {
                     var row = document.getElementById(id).closest("tr");
                     row.remove();
+                    resetNumbersServiceTable();
                 });
             }
         });
     }
 
-    function addSubService(id){
+    function resetNumbers() {
+        $("#searchTable > tbody > tr").each(function (i) {
+            var tds = this.cells;
+            tds[0].innerHTML = (i + 1);
+        });
+    }
+    function resetNumbersServiceTable() {
+        $("#serviceTable > tbody > tr").each(function (i) {
+            var tds = this.cells;
+            tds[0].innerHTML = (i + 1);
+        });
+    }
+
+    function addSubService(id) {
         var parts = id.toString().split(" ");
         var subServiceId = parts[2];
         $.ajax({
             type: "GET",
-            url: "/addExpertToSubService/" +expertId +"/"+ subServiceId,
+            url: "/addExpertToSubService/" + expertId + "/" + subServiceId,
             success: function () {
                 $(function () {
                     var row = document.getElementById(id).closest("tr");
                     row.remove();
                     showServices();
+                    resetNumbers();
                 });
             }
         });

@@ -52,7 +52,7 @@ public class ExpertController {
             return "/ConfirmErrorPage";
     }
 
-    @GetMapping("/Expert/Page")
+    @GetMapping("/Expert/ProfilePage")
     public String getExpertPage(){
         return "ExpertPage";
     }

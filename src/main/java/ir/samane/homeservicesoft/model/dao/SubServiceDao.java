@@ -4,6 +4,8 @@ import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.Service;
 import ir.samane.homeservicesoft.model.entity.SubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -27,6 +29,8 @@ public interface SubServiceDao extends JpaRepository<SubService, Integer>, JpaSp
     List<SubService> findByExpert(@Param("expert")Expert expert);
 
     List<SubService> findByService(Service service);
+
+    Page<SubService> findAll(Pageable pageable);
 
     Optional<SubService> findByName(String name);
 

@@ -72,7 +72,7 @@ public class ServiceController {
     @PutMapping("/editSubService")
     public ResponseEntity editSubService(@RequestBody SubService subService) {
         try {
-            subServiceService.addSubService(subService);
+            subServiceService.editSubService(subService);
             return ResponseEntity.ok("subService " + subService.getName() + " is edited!");
         } catch (Exception exception) {
             return ResponseEntity.status(400).body(exception.getMessage());
@@ -158,6 +158,16 @@ public class ServiceController {
     public ResponseEntity checkSubServiceNameUniqueness(@RequestBody InputDto inputDto){
         try {
             subServiceService.checkSubServiceNameUniqueness(inputDto.getInput());
+            return ResponseEntity.ok("name looks good!");
+        }catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkSubServiceEditNameUniqueness/{name}")
+    public ResponseEntity checkSubServiceEditNameUniqueness(@RequestBody InputDto inputDto, @PathVariable("name") String name){
+        try {
+            subServiceService.checkEditSubServiceNameUniqueness(inputDto.getInput(), name);
             return ResponseEntity.ok("name looks good!");
         }catch (Exception e){
             return ResponseEntity.status(400).body(e.getMessage());

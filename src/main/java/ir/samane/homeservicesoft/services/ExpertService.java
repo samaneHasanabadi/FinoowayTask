@@ -29,6 +29,10 @@ public class ExpertService extends UserService {
         return save;
     }
 
+    public void saveExpert(Expert expert){
+        expertDao.save(expert);
+    }
+
     @Override
     public User registerUser(User user) throws Exception {
         User save = super.registerUser(user);

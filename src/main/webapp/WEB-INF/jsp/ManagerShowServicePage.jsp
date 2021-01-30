@@ -14,6 +14,7 @@
     <%--    <link rel="stylesheet" href="MSPCSS">--%>
     <title>title</title>
 </head>
+<body>
 <nav class="navbar navbar-inverse" style="background-color: #dddede; border-color: #dddede ">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -26,12 +27,12 @@
             <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+            <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
         </ul>
     </div>
 </nav>
 <div id="message" class="well well-large"
-     style="display: none;justify-content: center;align-items: center;background-color: #f1d548;width: 85%;height:10%;margin-top: 1%;margin-left: 5%">
+     style="display: none;justify-content: center;align-items: center;background-color: #f1d548;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
 </div>
 <div style="display: flex; flex-direction: row; height: 89%">
     <div class="vertical-menu">
@@ -61,22 +62,7 @@
             </tbody>
         </table>
         <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
+            <ul class="pagination justify-content-center" id="ulPage">
             </ul>
         </nav>
     </div>
@@ -86,44 +72,56 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel">Add or Remove Sub Services</h4>
+                <h4 class="modal-title" id="exampleModalLabel">Edit Sub Service</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="service-name" class="col-form-label">Service</label>
-                        <input type="text" class="form-control" id="service-name">
+                <form id="subService" method="post">
+                    <div class="mb-3" style="display: none">
+                        <label for="id" class="form-label">id</label>
+                        <input name="name" id="id" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label for="service-type" class="col-form-label">Service Type</label>
-                        <input type="text" class="form-control" id="service-type">
+                    <div class="mb-3">
+                        <label for="subService-name" class="form-label">Sub Service Name</label>
+                        <input name="name" id="subService-name" class="form-control" oninput="checkSubName()" required>
+                        <div id="sbNameMessageDiv" style="color: red"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="subService-name" class="col-form-label">Sub Service</label>
-                        <input type="text" class="form-control" id="subService-name">
+                    <br>
+                    <div class="mb-3">
+                        <label for="subService-type" class="form-label">Sub Service Type</label>
+                        <input name="type.name" id="subService-type" class="form-control" oninput="checkSubType()" required>
+                        <div id="sbTypeMessageDiv" style="color: red"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="subService-Type" class="col-form-label">Type</label>
-                        <input type="text" class="form-control" id="subService-type">
+                    <br>
+                    <div class="mb-3">
+                        <label for="serviceSelector" class="form-label">Service</label>
+                        <select id="ServiceSelector" class="form-select" aria-label="Default select example" onchange="checkSubServiceService()" required>
+                            <option value=""></option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="subService-price" class="col-form-label">Price</label>
-                        <input type="text" class="form-control" id="subService-price">
+                    <br>
+                    <div class="mb-3">
+                        <label for="subService-price" class="form-label">Price</label>
+                        <input name="price" type="number" id="subService-price" class="form-control" oninput="checkSubPrice()"
+                               required>
+                        <div id="sbPriceMessageDiv" style="color: red"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="subService-description" class="col-form-label">Description</label>
-                        <input type="text" class="form-control" id="subService-description">
+                    <br>
+                    <div class="mb-3">
+                        <label for="subService-description" class="form-label">Description</label>
+                        <textarea class="form-control" id="subService-description" rows="3" oninput="checkDescription()" required></textarea>
+                        <div id="sbDescriptionMessageDiv" style="color: red"></div>
                     </div>
+                    <br>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveChanges"
-                        onclick="editService(); editSubService()"
-                        style="background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f">Save changes
+                        onclick="editSubService()"
+                        style="background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f" disabled>Save changes
                 </button>
             </div>
         </div>
@@ -135,7 +133,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="deleteModalHeader">Add or Remove Sub Services</h4>
+                <h4 class="modal-title" id="deleteModalHeader">Delete Sub Service</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -194,7 +192,9 @@
 <style>
     .vertical-menu {
         width: 20%;
-        background-image: url("878.png");
+        background: url("/878.png");
+        background-repeat: no-repeat;
+        background-position: center;
     }
 
     .vertical-menu a {
@@ -214,87 +214,494 @@
     }
 </style>
 <script>
-    var rowCount = 0;
-    $("#showServiceBtn").on('click', function () {
+
+    var activeLiId = "";
+    var numpages = 0;
+
+    var boolServiceName = true;
+    var boolServiceType = true;
+    var boolSubServiceName = true;
+    var boolSubServiceType = true;
+    var boolSubServiceService = true;
+    var boolSubServicePrice = true;
+
+    var flag = true;
+
+    var temp = false;
+
+    function checkSubName() {
+        $("#sbNameMessageDiv").hide();
+        var name = {};
+        name["input"] = $("#subService-name").val();
+        name["inputName"] = "name";
+        ajaxCall("/checkSubServiceFiledLength", name, "#subService-name", "#sbNameMessageDiv");
+        boolSubServiceName = temp;
+        if(temp) {
+            checkSubServiceNameUniqueness();
+        }
+        if(validate()){
+            $("#saveChanges").prop("disabled",false);
+        }else {
+            $("#saveChanges").prop("disabled",true);
+        }
+    }
+
+    function checkSubType() {
+        $("#sbTypeMessageDiv").hide();
+        var name = {};
+        name["input"] = $("#subService-type").val();
+        name["inputName"] = "type";
+        ajaxCall("/checkSubServiceFiledLength", name, "#subService-type", "#sbTypeMessageDiv");
+        boolSubServiceType = temp;
+        if(validate()){
+            $("#saveChanges").prop("disabled",false);
+        }else {
+            $("#saveChanges").prop("disabled",true);
+        }
+    }
+
+    function checkSubPrice() {
+        $("#sbPriceMessageDiv").hide();
+        var name = {};
+        name["input"] = $("#subService-price").val();
+        name["inputName"] = "price";
+        ajaxCall("/checkSubServicePrice", name, "#subService-price", "#sbPriceMessageDiv");
+        boolSubServicePrice = temp;
+        if(validate()){
+            $("#saveChanges").prop("disabled",false);
+        }else {
+            $("#saveChanges").prop("disabled",true);
+        }
+    }
+
+    function checkSubServiceService() {
+        if ($("#ServiceSelector").val() === "") {
+            boolSubServiceService = false;
+        } else {
+            boolSubServiceService = true;
+        }
+        if(validate()){
+            $("#saveChanges").prop("disabled",false);
+        }else {
+            $("#saveChanges").prop("disabled",true);
+        }
+    }
+
+    function checkDescription(){
+        if(validate()){
+            $("#saveChanges").prop("disabled",false);
+        }else {
+            $("#saveChanges").prop("disabled",true);
+        }
+    }
+
+    function checkSubServiceNameUniqueness() {
+        $("#sbNameMessageDiv").hide();
+        var name = {};
+        name["input"] = $("#subService-name").val();
+        var $row = document.getElementById("editBtn " + serviceId + " " + subServiceId).closest("tr");
+        tds = $row.cells;
+        var oldName = tds[3].innerHTML;
+        ajaxCall("/checkSubServiceEditNameUniqueness/" + oldName, name, "#subService-name", "#sbNameMessageDiv");
+        boolSubServiceName = temp;
+    }
+
+    function ajaxCall(url, input, id, divId) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: url,
+            data: JSON.stringify(input),
+            dataType: 'json',
+            async: false,
+            success: function (response) {
+                if (response.toString().includes("good")) {
+                    $(id).css("border-color", '#dddede');
+                    temp = true;
+                } else {
+                    temp = false;
+                    $(id).css("border-color", "red");
+                    $("sNameMessageDiv").html(response);
+                }
+            },
+            error: function (error) {
+                if (error.responseText.includes("good")) {
+                    $(id).css("border-color", "#dddede");
+                    temp = true;
+                } else {
+                    temp = false;
+                    $(id).css("border-color", "red");
+                    $(divId).show();
+                    $(divId).html(error.responseText);
+                }
+            }
+        });
+    }
+
+    function getServiceSelector(id){
+        if (flag) {
+            $.ajax({
+                type: "GET",
+                url: "/getAllServices",
+                success: function (data) {
+                    $("#ServiceSelector").empty();
+                    $(function () {
+                        $.each(data, function (i, f) {
+                            if(f.id.toString() === id) {
+                                $("#ServiceSelector").append("<option id='" + f.id + "' value='" + f.id + "' selected>" + f.name + "</option>");
+                            }else {
+                                $("#ServiceSelector").append("<option id='" + f.id + "' value='" + f.id + "'>" + f.name + "</option>");
+                            }
+                        });
+                    });
+                }
+            });
+            flag = false;
+        }
+    };
+
+    function addPage(numPages) {
+        numpages = numPages;
+        var liPrev = "";
+        liPrev = "<li  class=\"page-item disabled\" id='li prev'>" +
+            "<a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\" id='prev' onclick='prevPage()'>" +
+            "<span aria-hidden=\"true\">&laquo;</span>" +
+            "<span class=\"sr-only\">Previous</span>" +
+            "</a>" +
+            "</li>";
+        var liNext = "";
+        if (numPages < 2) {
+            liNext = "<li class=\"page-item disabled\" id='li next'>" +
+                "<a class=\"page-link\" href=\"#\" aria-label=\"Next\" tabindex=\"-1\" id='next' onclick='nextPage()'>" +
+                "<span aria-hidden=\"true\">&raquo;</span>" +
+                "<span class=\"sr-only\">Next</span>" +
+                "</a>" +
+                "</li>";
+        } else {
+            liNext = "<li class=\"page-item\" id='li next'>" +
+                "<a class=\"page-link\" href=\"#\" aria-label=\"Next\" id='next' onclick='nextPage()'>" +
+                "<span aria-hidden=\"true\">&raquo;</span>" +
+                "<span class=\"sr-only\">Next</span>" +
+                "</a>" +
+                "</li>";
+        }
+        var lid = "";
+        if (numPages < 4) {
+            for (var i = 0; i < numPages; i++) {
+                if (i === 0) {
+                    lid = lid + "<li class=\"page-item active\" id='li 1'><a class=\"page-link\" href=\"#\" id='aTag 1' onclick='changeActivePageByNumber(id)'>" + (i + 1) + "</a></li>";
+                } else {
+                    lid = lid + "<li class=\"page-item\" id='li " + (i + 1) + "'><a class=\"page-link\" href=\"#\" id = 'aTag " + (i + 1) + "' onclick='changeActivePageByNumber(id)'>" + (i + 1) + "</a></li>";
+                }
+            }
+        } else {
+            lid = lid + "<li class=\"page-item active\" id='li 1'><a class=\"page-link\" href=\"#\" id='aTag 1' onclick='changeActivePageByNumber(id)'>1</a></li>";
+            lid = lid + "<li class=\"page-item disabled\" id='li dot'><a class=\"page-link\" href=\"#\">. . .</a></li>";
+            lid = lid + "<li class=\"page-item\" id='li " + numPages + "'><a class=\"page-link\" href=\"#\" id='aTag " + numPages + "' onclick='changeActivePageByNumber(id)'>" + numPages + "</a></li>";
+        }
+        var nav = liPrev + lid + liNext;
+        $('#ulPage').html(nav);
+        activeLiId = "li 1";
+    }
+
+    function addLastPage(numPages) {
+        var liPrev = "<li  class=\"page-item\" id='li prev'>" +
+            "<a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\" id='prev' onclick='prevPage()'>" +
+            "<span aria-hidden=\"true\">&laquo;</span>" +
+            "<span class=\"sr-only\">Previous</span>" +
+            "</a>" +
+            "</li>";
+        var liNext = "<li class=\"page-item\" id='li next'>" +
+            "<a class=\"page-link\" href=\"#\" aria-label=\"Next\" id='next' onclick='nextPage()'>" +
+            "<span aria-hidden=\"true\">&raquo;</span>" +
+            "<span class=\"sr-only\">Next</span>" +
+            "</a>" +
+            "</li>";
+        var lid = "";
+        lid = lid + "<li class=\"page-item disabled\" id='li dot'><a class=\"page-link\" href=\"#\">. . .</a></li>";
+        lid = lid + "<li class=\"page-item active\" id='li " + (numPages - 1) + "'><a class=\"page-link\" href=\"#\" id='aTag " + (numPages - 1) + "' onclick='changeActivePageByNumber(id)'>" + (numPages - 1) + "</a></li>";
+        lid = lid + "<li class=\"page-item\" id='li " + numPages + "'><a class=\"page-link\" href=\"#\" id='aTag " + numPages + "' onclick='changeActivePageByNumber(id)'>" + numPages + "</a></li>";
+        var nav = liPrev + lid + liNext;
+        $('#ulPage').html(nav);
+        activeLiId = "li " + (numPages - 1);
+    }
+
+    function addPrevPage(numPages) {
+        var liPrev = "<li  class=\"page-item\" id='li prev'>" +
+            "<a class=\"page-link\" href=\"#\" aria-label=\"Previous\" tabindex=\"-1\" id='prev' onclick='prevPage()'>" +
+            "<span aria-hidden=\"true\">&laquo;</span>" +
+            "<span class=\"sr-only\">Previous</span>" +
+            "</a>" +
+            "</li>";
+        var liNext = "<li class=\"page-item\" id='li next'>" +
+            "<a class=\"page-link\" href=\"#\" aria-label=\"Next\" id='next' onclick='nextPage()'>" +
+            "<span aria-hidden=\"true\">&raquo;</span>" +
+            "<span class=\"sr-only\">Next</span>" +
+            "</a>" +
+            "</li>";
+        var lid = "";
+        lid = lid + "<li class=\"page-item active\" id='li " + (numPages - 2) + "'><a class=\"page-link\" href=\"#\" id='aTag " + (numPages - 2) + "' onclick='changeActivePageByNumber(id)'>" + (numPages - 2) + "</a></li>";
+        lid = lid + "<li class=\"page-item disabled\" id='li dot'><a class=\"page-link\" href=\"#\">. . .</a></li>";
+        lid = lid + "<li class=\"page-item\" id='li " + numPages + "'><a class=\"page-link\" href=\"#\" id='aTag " + numPages + "' onclick='changeActivePageByNumber(id)'>" + numPages + "</a></li>";
+        var nav = liPrev + lid + liNext;
+        $('#ulPage').html(nav);
+        activeLiId = "li " + (numPages - 2);
+    }
+
+    function changeActivePageByNumber(id) {
+        var newNumber = parseInt(id.toString().split(" ")[1]);
+        getPageContent(newNumber);
+        changeActiveByNumber(newNumber);
+        if (newNumber === 1) {
+            document.getElementById("li prev").classList.add("disabled");
+            document.getElementById("li next").classList.remove("disabled");
+        }
+        if (newNumber === numpages) {
+            document.getElementById("li next").classList.add("disabled");
+            document.getElementById("li prev").classList.remove("disabled");
+        }
+        if (newNumber > 1 && newNumber < numpages) {
+            document.getElementById("li next").classList.remove("disabled");
+            document.getElementById("li prev").classList.remove("disabled");
+        }
+    }
+
+    function changeActiveByNumber(newNumber) {
+        var newLiId = "li " + (newNumber);
+        document.getElementById(activeLiId).classList.remove("active");
+        document.getElementById(newLiId).classList.add("active");
+        activeLiId = newLiId;
+    }
+
+    function prevPage() {
+        var activePage = activeLiId.split(" ")[1];
+        var prevPage = parseInt(activePage) - 1;
+        getPageContent(prevPage);
+        document.getElementById("li next").classList.remove("disabled");
+        if (numpages > 3) {
+            if (parseInt(activePage) < (numpages - 1)) {
+                changePrevActivePage(activePage);
+                if (parseInt(activePage) === 2) {
+                    document.getElementById("li prev").classList.add("disabled");
+                }
+            }
+            if (parseInt(activePage) === (numpages - 1)) {
+                addPrevPage(numpages);
+            }
+            if (parseInt(activePage) === numpages) {
+                changePrevActive(activePage);
+            }
+        } else {
+            changePrevActive(activePage);
+            if (parseInt(activePage) === 2) {
+                document.getElementById("li prev").classList.add("disabled");
+            }
+        }
+    }
+
+    function changePrevActivePage(activePage) {
+        var newLiId = "li " + (parseInt(activePage) - 1);
+        var aId = "aTag " + activePage;
+        var atag = document.getElementById(aId);
+        atag.innerHTML = (parseInt(activePage) - 1).toString();
+        var newAId = "aTag " + (parseInt(activePage) - 1);
+        document.getElementById(activeLiId).id = newLiId;
+        atag.id = newAId;
+        activeLiId = newLiId;
+    }
+
+    function changePrevActive(activePage) {
+        var newLiId = "li " + (parseInt(activePage) - 1);
+        document.getElementById(activeLiId).classList.remove("active");
+        document.getElementById(newLiId).classList.add("active");
+        activeLiId = newLiId;
+    }
+
+    function nextPage() {
+        var activePage = activeLiId.split(" ")[1];
+        var nextPage = parseInt(activePage) + 1;
+        getPageContent(nextPage);
+        document.getElementById("li prev").classList.remove("disabled");
+        if (numpages > 3) {
+            if (parseInt(activePage) < (numpages - 2)) {
+                changeActivePage(activePage);
+            }
+            if (parseInt(activePage) === (numpages - 2)) {
+                addLastPage(numpages);
+            }
+            if (parseInt(activePage) === (numpages - 1)) {
+                changeActive(activePage);
+                document.getElementById("li next").classList.add("disabled");
+            }
+        } else {
+            changeActive(activePage);
+            if (parseInt(activePage) === (numpages - 1)) {
+                document.getElementById("li next").classList.add("disabled");
+            }
+        }
+    };
+
+    function changeActivePage(activePage) {
+        var newLiId = "li " + (parseInt(activePage) + 1);
+        var aId = "aTag " + activePage;
+        var atag = document.getElementById(aId);
+        atag.innerHTML = (parseInt(activePage) + 1).toString();
+        var newAId = "aTag " + (parseInt(activePage) + 1);
+        document.getElementById(activeLiId).id = newLiId;
+        atag.id = newAId;
+        activeLiId = newLiId;
+    }
+
+    function changeActive(activePage) {
+        var newLiId = "li " + (parseInt(activePage) + 1);
+        document.getElementById(activeLiId).classList.remove("active");
+        document.getElementById(newLiId).classList.add("active");
+        activeLiId = newLiId;
+    }
+
+    var numberOfPageElements = 0;
+
+    function getPageContent(pageNumber) {
         $.ajax({
             type: "GET",
-            url: "/getAllServices",
+            url: "/getAllSubServices/" + (pageNumber - 1),
             async: false,
             success: function (data) {
                 $("#serviceTable tr:gt(0)").remove();
                 $(function () {
-                    var rowcount = 1;
-                    $.each(data, function (i, f) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/getSubServicesOfService/" + f.id,
-                            async: false,
-                            success: function (data2) {
-                                var row = "";
-                                $(function () {
-                                    if (data2.length === 0) {
-                                        row = row + "<tr><th scope=\"row\">" + rowcount + "</th><td class='service-name'>" + f.name + "</td><td class='service-type'>" + f.type.name + "</td>";
-                                        row = row + "<td class='subService-name'></td><td class='subService-type'></td><td class='subService-price'></td><td class='subService-description'></td>" +
-                                            "<td><div class='btn-toolbar'><button id='editBtn " + f.id + " 0' type=\"button\" onclick='fillModal(id)' class=\"btn btn-warning\" data-toggle='modal' data-target='#editServices' style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Edit</button>" +
-                                            "<button id='deleteBtn " + f.id + " 0' type=\"button\" onclick='fillDeleteModal(id)' class=\"btn btn-danger\"  data-toggle='modal' data-target='#deleteModal' style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Delete</button></div></td><td><div class=\"form-check\"></div></td><td style=\"display: none\"></td></tr>";
-                                        rowcount = rowcount + 1;
-                                    }
-                                    $.each(data2, function (i2, f2) {
-                                        row = row + "<tr><th scope=\"row\">" + rowcount + "</th><td class='service-name'>" + f.name + "</td><td class='service-type'>" + f.type.name + "</td>";
-                                        row = row + "<td class='subService-name'>" + f2.name + "</td><td class='subService-type'>" + f2.type.name + "</td><td class='subService-price'>" + f2.price + "</td><td class='subService-description'>" + f2.description + "</td><td><div class='btn-toolbar'>" +
-                                            "<button type=\"button\" class=\"btn btn-warning\" id='editBtn " + f.id + " " + f2.id + "' onclick='fillModal(id)' data-toggle='modal' data-target='#editServices' style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Edit</button>" +
-                                            "<button type=\"button\" class=\"btn btn-danger\" id='deleteBtn " + f.id + " " + f2.id + "' onclick='fillDeleteModal(id)' data-toggle='modal' data-target='#deleteModal' style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Delete</button></div></td><td><div class=\"form-check\">" +
-                                            "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"checkBox " + f.id + " " + f2.id + "\" onclick='showExperts(id)' onchange='showModal(this)'></div></td></tr>";
-                                        rowcount = rowcount + 1;
-                                    });
-                                    $("#serviceTable").append(row);
-                                });
-                            }
-                        });
+                    var row = "";
+                    $.each(data.content, function (i, f) {
+                        row = row + addRowToServiceTable((i + (numberOfPageElements * (pageNumber - 1))), f);
                     });
+                    $("#serviceTable").append(row);
+                });
+            }
+        });
+    }
+
+    var rowCount = 0;
+    var expertRowCount = 0;
+    $("#showServiceBtn").on('click', function () {
+        $.ajax({
+            type: "GET",
+            url: "/getAllSubServices/0",
+            async: false,
+            success: function (data) {
+                $("#serviceTable tr:gt(0)").remove();
+                $(function () {
+                    var row = "";
+                    numberOfPageElements = ~~(parseInt(data.totalElements) / parseInt(data.totalPages));
+                    if ((parseInt(data.totalElements) % parseInt(data.totalPages)) > 0)
+                        numberOfPageElements = numberOfPageElements + 1;
+                    $.each(data.content, function (i, f) {
+                        row = row + addRowToServiceTable(i, f);
+                    });
+                    $("#serviceTable").append(row);
+                    addPage(data.totalPages);
                 });
             }
         });
     });
+
+    function addRowToServiceTable(i, f) {
+        var row = "";
+        row = row + "<tr><th scope=\"row\">" + (i + 1) + "</th><td class='service-name'>" + f.service.name + "</td><td class='service-type'>" + f.service.type.name + "</td>";
+        row = row + "<td class='subService-name'>" + f.name + "</td><td class='subService-type'>" + f.type.name + "</td><td class='subService-price'>" + f.price + "</td><td class='subService-description'>" + f.description + "</td><td><div class='btn-toolbar'>" +
+            "<button type=\"button\" class=\"btn btn-warning\" id='editBtn " + f.service.id + " " + f.id + "' onclick='fillModal(id)' data-toggle='modal' data-target='#editServices' style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Edit</button>" +
+            "<button type=\"button\" class=\"btn btn-danger\" id='deleteBtn " + f.service.id + " " + f.id + "' onclick='fillDeleteModal(id)' data-toggle='modal' data-target='#deleteModal' style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Delete</button></div></td><td><div class=\"form-check\">" +
+            "<input class=\"form-check-input\" type=\"checkbox\" value=\"\" id=\"checkBox " + f.service.id + " " + f.id + "\" onclick='showExperts(id)' onchange='showModal(this)'></div></td></tr>";
+        return row;
+    }
+
     var serviceId;
     var subServiceId;
 
-    function showModal(checkBox){
-        if(checkBox.checked){
+    function showModal(checkBox) {
+        if (checkBox.checked) {
             $("#expertModal").modal("show");
         }
     }
 
     function editSubService() {
-        if (subServiceId !== "0") {
-            var formData = {};
-            var typeData = {};
-            typeData["name"] = $("#subService-type").val();
-            formData["id"] = subServiceId;
-            formData["name"] = $("#subService-name").val();
-            formData["type"] = typeData;
-            formData["price"] = $("#subService-price").val();
-            formData["description"] = $("#subService-description").val();
-            var $row = document.getElementById("editBtn " + serviceId + " " + subServiceId).closest("tr"),
-                tds = $row.cells;
-            tds[3].innerHTML = $("#subService-name").val();
-            tds[4].innerHTML = $("#subService-type").val();
-            tds[5].innerHTML = $("#subService-price").val();
-            tds[6].innerHTML = $("#subService-description").val();
-            $.ajax({
-                type: "PUT",
-                dataType: 'json',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                url: "/editService",
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        if (validate())
+        {
+            if (boolSubServiceName) {
+                var formData = {};
+                var typeData = {};
+                var id = $("#ServiceSelector").find('option:selected').attr('id');
+                formData["id"] = subServiceId;
+                typeData["name"] = $("#subService-type").val();
+                formData["name"] = $("#subService-name").val();
+                formData["type"] = typeData;
+                //console.log(getById(id));
+                $.ajax({
+                    type: "GET",
+                    url: "/getServiceById/" + id,
+                    contentType: "application/json",
+                    async: false,
+                    success: function (response) {
+                        var data = JSON.parse(JSON.stringify(response).replaceAll("[", "{").replaceAll("]", "}"));
+                        //delete data["subServices"];
+                        formData["service"] = response;
+                        console.log(formData["service"]);
+                        //console.log(serviceData);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+                formData["price"] = $("#subService-price").val();
+                formData["description"] = $("#subService-description").val();
+                $.ajax({
+                    type: "PUT",
+                    contentType: "application/json",
+                    url: "/editSubService",
+                    data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function (response) {
+                        showSubSuccessMessage(response);
+                        editSubServiceTable(formData["service"]);
+                    },
+                    error: function (error) {
+                        showSubSuccessMessage(error.responseText)
+                        if(error.responseText.includes("edit")){
+                            editSubServiceTable(formData["service"]);
+                        }
+                    }
+                });
+            }
         }
+    }
+
+    function showSubSuccessMessage(response) {
+        if (response.toString().includes("added")) {
+            document.getElementById("subService").reset();
+        }
+        $("#message").html("<span><h4>" + response + "</h4></span>");
+        $("#message").css('display', 'flex');
+        hideMessage();
+    }
+
+    function hideMessage() {
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 7000);
+    }
+
+    function editSubServiceTable(service){
+        var $row = document.getElementById("editBtn " + serviceId + " " + subServiceId).closest("tr"), tds = $row.cells;
+        tds[1].innerHTML = service.name;
+        tds[2].innerHTML = service.type.name;
+        tds[3].innerHTML = $("#subService-name").val();
+        tds[4].innerHTML = $("#subService-type").val();
+        tds[5].innerHTML = $("#subService-price").val();
+        tds[6].innerHTML = $("#subService-description").val();
+    }
+
+    function validate(){
+        if(boolSubServiceName && boolSubServiceType && boolSubServicePrice && boolSubServiceService)
+            return true;
+        return false;
     }
 
     function editService() {
@@ -323,42 +730,29 @@
     }
 
     function deleteSubService() {
-        if (subServiceId === "0") {
-            $.ajax({
-                type: "DELETE",
-                url: "/deleteService/" + serviceId,
-                success: function (response) {
-                },
-                error: function (error) {
+        $.ajax({
+            type: "DELETE",
+            url: "/deleteSubService/" + subServiceId,
+            success: function (response) {
+                if (!response.toString().includes("expert")) {
+                    var $row = document.getElementById("deleteBtn " + serviceId + " " + subServiceId).closest("tr");
+                    $row.remove();
+                    resetNumbers();
+                    showDeleteMessage(response);
+                } else {
+                    showDeleteMessage(response);
                 }
-            });
-            var $row = document.getElementById("deleteBtn " + serviceId + " " + subServiceId).closest("tr");
-            $row.remove();
-            resetNumbers();
-        } else {
-            $.ajax({
-                type: "DELETE",
-                url: "/deleteSubService/" + subServiceId,
-                success: function (response) {
-                    if(!response.toString().includes("expert")){
-                        var $row = document.getElementById("deleteBtn " + serviceId + " " + subServiceId).closest("tr");
-                        $row.remove();
-                        resetNumbers();
-                    }else {
-                        showDeleteMessage(response);
-                    }
-                },
-                error: function (error) {
-                    if(!error.responseText.includes("expert")){
-                        var $row = document.getElementById("deleteBtn " + serviceId + " " + subServiceId).closest("tr");
-                        $row.remove();
-                        resetNumbers();
-                    }else{
-                        showDeleteMessage(error.responseText);
-                    }
+            },
+            error: function (error) {
+                if (!error.responseText.includes("expert")) {
+                    var $row = document.getElementById("deleteBtn " + serviceId + " " + subServiceId).closest("tr");
+                    $row.remove();
+                    resetNumbers();
+                } else {
+                    showDeleteMessage(error.responseText);
                 }
-            });
-        }
+            }
+        });
     }
 
     function showDeleteMessage(response) {
@@ -377,8 +771,9 @@
         var parts = $id.toString().split(" ");
         serviceId = parts[1];
         subServiceId = parts[2];
+        getServiceSelector(serviceId);
         var $row = document.getElementById($id).closest("tr"), tds = $row.cells;
-        for (var i = 1; i < tds.length - 1; i++) {
+        for (var i = 3; i < tds.length - 1; i++) {
             var input_name = tds[i].className;
             var input_val = tds[i].innerHTML;
             document.getElementById(input_name).value = input_val;
@@ -414,7 +809,7 @@
                 success: function (response) {
                     var row = "";
                     $.each(response, function (i, f) {
-                        rowCount = rowCount + 1;
+                        expertRowCount = i + 1;
                         row = row + "<tr id='tr " + f.id + "'><td>" + (i + 1) + "</td><td style='display: none'>" + f.id + "</td><td><button id=\"minusButton " + f.id + " " + subServiceId + "\" onclick='removeExpertOfSubService(id)' " +
                             "class=\"btn btn-primary\" style='background-color: #6adbbb; border-color: #6adbbb'><i class=\"fa fa-minus\" style=\"color: #1f1f1f\"></i></button></td><td>" + f.name + "</td><td>" + f.family + "</td></tr>";
                     });
@@ -494,7 +889,7 @@
     }
 
     function removeExpertOfSubService(id) {
-        rowCount = rowCount - 1;
+        expertRowCount = expertRowCount - 1;
         var parts = id.toString().split(" ");
         var expertId = parts[1];
         subServiceId = parts[2];
@@ -512,23 +907,23 @@
     }
 
     function addExpertToTd(id, name, family) {
-        rowCount = rowCount + 1;
-        return "<tr id='tr " + id + "'><td>" + (rowCount) + "</td><td style='display: none'>" + id + "</td><td><button id=\"minusButton " + id + " " + subServiceId + "\" onclick='removeExpertOfSubService(id)' " +
+        expertRowCount = expertRowCount + 1;
+        return "<tr id='tr " + id + "'><td>" + (expertRowCount) + "</td><td style='display: none'>" + id + "</td><td><button id=\"minusButton " + id + " " + subServiceId + "\" onclick='removeExpertOfSubService(id)' " +
             "class=\"btn btn-primary\" style='background-color: #6adbbb; border-color: #6adbbb'><i class=\"fa fa-minus\" style=\"color: #1f1f1f\"></i></button></td><td>" + name + "</td><td>" + family + "</td></tr>";
 
     }
 
-    function resetNumbers(){
+    function resetNumbers() {
         $("table > tbody > tr").each(function (i) {
             var tds = this.cells;
-            tds[0].innerHTML = (i+1);
+            tds[0].innerHTML = (i + 1);
         });
     }
 
-    function resetExpertsNumbers(){
+    function resetExpertsNumbers() {
         $("#expertTable > tbody > tr").each(function (i) {
             var tds = this.cells;
-            tds[0].innerHTML = (i+1);
+            tds[0].innerHTML = (i + 1);
         });
     }
 

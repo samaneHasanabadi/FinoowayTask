@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-<div id="message" style="display: none;justify-content: center;align-items: center;background-color: #dddede;border-color: #868787;width: 85%;height:10%;margin-top: 1%;margin-left: 5%">
+<div id="message" style="display: none;justify-content: center;background-color: #f1d548;align-items: center;border-color: #868787;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
 </div>
 <div>
     <div class="container" style="width: 30%;margin: 5%; background-color: #dddede">
@@ -191,7 +191,7 @@
                     temp = false;
                     $(id).css("border-color", "red");
                 }else{
-                    $(id).css("border-color", "green");
+                    $(id).css("border-color", '#dddede');
                     temp = true;
                 }
             }

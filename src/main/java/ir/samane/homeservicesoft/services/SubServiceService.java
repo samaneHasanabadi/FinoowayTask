@@ -22,7 +22,7 @@ public class SubServiceService {
     @Autowired
     private SubServiceDao subServiceDao;
     private int maxLength = 30;
-    private int pageSize = 9;
+    private int pageSize = 2;
 
     public void addSubService(SubService subService) throws Exception {
         checkTypeNull(subService.getType());
@@ -50,6 +50,12 @@ public class SubServiceService {
         Optional<SubService> subService = findByName(name);
         if(subService.isPresent())
             throw new Exception("Sub service with name " + name + " is already exists");
+    }
+
+    public void checkEditSubServiceNameUniqueness(String editName, String name) throws Exception {
+        if(!editName.equals(name)) {
+            checkSubServiceNameUniqueness(editName);
+        }
     }
 
     public void checkFieldNull(String field, String fieldName) throws Exception {
@@ -145,6 +151,24 @@ public class SubServiceService {
 
     public List<SubService> findByServiceNameAndSubServiceName(SubServiceDto subServiceDto){
         return subServiceDao.findAll(SubServiceDao.findBy(subServiceDto.getServiceName(),subServiceDto.getSubServiceName()));
+    }
+
+    public void editSubService(SubService subService) throws Exception {
+        checkTypeNull(subService.getType());
+        checkFieldNull(subService.getName(), "name");
+        checkFieldLength(subService.getName(), "name");
+        checkFieldNull(subService.getDescription(), "description");
+        checkPrice(subService.getPrice());
+        checkFieldNull(subService.getType().getName(), "type name");
+        checkFieldLength(subService.getType().getName(), "type name");
+        SubService oldSubService = findById(subService.getId());
+        checkEditSubServiceNameUniqueness(subService.getName(), oldSubService.getName());
+        oldSubService.setName(subService.getName());
+        oldSubService.setService(subService.getService());
+        oldSubService.setDescription(subService.getDescription());
+        oldSubService.setPrice(subService.getPrice());
+        oldSubService.setType(subService.getType());
+        subServiceDao.save(oldSubService);
     }
 
 }

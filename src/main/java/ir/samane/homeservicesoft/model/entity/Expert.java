@@ -1,8 +1,6 @@
 package ir.samane.homeservicesoft.model.entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +9,8 @@ public class Expert extends User{
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "experts")
     List<SubService> subServices = new ArrayList<>();
     private int score;
+    @OneToMany
+    private List<Request> requests;
 
     public Expert(){
 
@@ -30,5 +30,13 @@ public class Expert extends User{
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
 }

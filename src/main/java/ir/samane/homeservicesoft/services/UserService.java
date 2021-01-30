@@ -1,9 +1,12 @@
 package ir.samane.homeservicesoft.services;
 
 import ir.samane.homeservicesoft.dto.UserDto;
+import ir.samane.homeservicesoft.model.dao.ExpertDao;
 import ir.samane.homeservicesoft.model.dao.UserDao;
+import ir.samane.homeservicesoft.model.entity.ConfirmationToken;
 import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.User;
+import ir.samane.homeservicesoft.model.enums.RegisterStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +28,10 @@ public class UserService implements UserDetailsService {
     UserDao userDao;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
+    @Autowired
+    ExpertService expertService;
 
     private int maxNameLength = 16;
     private int minNameLength = 2;
@@ -34,8 +41,10 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(int id) throws Exception {
-        User user = userDao.findById(id);
-        return user;
+        Optional<User> user = userDao.findById(id);
+        if(!user.isPresent())
+            throw new Exception("There is no User with this Id");
+        return user.get();
     }
 
     public Boolean findByEmail(String email) {
@@ -44,6 +53,18 @@ public class UserService implements UserDetailsService {
         if (userByEmail.isPresent())
             flag = false;
         return flag;
+    }
+
+    public User getUserByEmail(String email) throws Exception {
+        Optional<User> userByEmail = userDao.findByEmail(email);
+        if (!userByEmail.isPresent())
+            throw new Exception("There is no user with this email!");
+        return userByEmail.get();
+    }
+
+    public void checkEditEmailUniqueness(String editEmail, String email) throws Exception {
+        if(!editEmail.equals(email) && !findByEmail(editEmail))
+            throw new Exception("Email is used before");
     }
 
     public Boolean checkPassword(String password) {
@@ -111,6 +132,8 @@ public class UserService implements UserDetailsService {
         Optional<User> userByEmail = userDao.findByEmail(email);
         if (!userByEmail.isPresent())
             throw new UsernameNotFoundException("not found");
+        if(!userByEmail.get().getStatus().equals(RegisterStatus.APPROVED))
+            throw new UsernameNotFoundException("User Must be in Approved Status");
         User user = userByEmail.get();
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
@@ -119,6 +142,26 @@ public class UserService implements UserDetailsService {
 
     public List<Expert> findBy(UserDto userDto) {
         return userDao.findAll(UserDao.findBy(userDto));
+    }
+
+    public void editUser(Expert user, String email) throws Exception {
+        checkNullField(user.getName(), "name");
+        checkNullField(user.getFamily(), "family");
+        checkNullField(user.getEmail(), "email");
+        checkEmailFormat(user.getEmail());
+        checkEditEmailUniqueness(user.getEmail(), email);
+        Expert expert = expertService.findById(user.getId());
+        expert.setName(user.getName());
+        expert.setFamily(user.getFamily());
+        expert.setEmail(user.getEmail());
+        expertService.saveExpert(expert);
+    }
+
+    public void deleteById(int id) throws Exception {
+        Optional<ConfirmationToken> confirmationToken = confirmationTokenService.findByUser(findById(id));
+        if(confirmationToken.isPresent())
+            confirmationTokenService.deleteConfirmationToken(confirmationToken.get().getId());
+        userDao.deleteById(id);
     }
 
 }
