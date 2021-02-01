@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class ConfirmationTokenService {
+    private ConfirmationTokenDao confirmationTokenDao;
+
     @Autowired
-    private final ConfirmationTokenDao confirmationTokenDao;
+    public void setConfirmationTokenDao(ConfirmationTokenDao confirmationTokenDao) {
+        this.confirmationTokenDao = confirmationTokenDao;
+    }
 
     public ConfirmationTokenService() {
         confirmationTokenDao = null;

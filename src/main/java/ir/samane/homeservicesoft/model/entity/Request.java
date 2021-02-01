@@ -1,16 +1,17 @@
 package ir.samane.homeservicesoft.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ir.samane.homeservicesoft.model.enums.RequestStatus;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String title;
     @ManyToOne
     private Customer customer;
     @OneToOne
@@ -19,8 +20,9 @@ public class Request {
     private Date date;
     private String Address;
     private String description;
-    @OneToMany
-    private List<ExpertOptionMap> expertsOption;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "request")
+    private Set<ExpertOptionMap> expertsOption = new HashSet<>();
     @ManyToOne
     private Expert expert;
     private double price;
@@ -33,6 +35,14 @@ public class Request {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public Customer getCustomer() {
@@ -83,11 +93,11 @@ public class Request {
         this.description = description;
     }
 
-    public List<ExpertOptionMap> getExpertsOption() {
+    public Set<ExpertOptionMap> getExpertsOption() {
         return expertsOption;
     }
 
-    public void setExpertsOption(List<ExpertOptionMap> expertsOption) {
+    public void setExpertsOption(Set<ExpertOptionMap> expertsOption) {
         this.expertsOption = expertsOption;
     }
 
@@ -113,5 +123,42 @@ public class Request {
 
     public void setRequestStatus(RequestStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", customer=" + customer +
+                ", date=" + date +
+                ", Address='" + Address + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", requestStatus=" + requestStatus +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Request request = (Request) o;
+        return id == request.id &&
+                Double.compare(request.proposedPrice, proposedPrice) == 0 &&
+                Double.compare(request.price, price) == 0 &&
+                Objects.equals(title, request.title) &&
+                Objects.equals(customer, request.customer) &&
+                Objects.equals(subService, request.subService) &&
+                Objects.equals(date, request.date) &&
+                Objects.equals(Address, request.Address) &&
+                Objects.equals(description, request.description) &&
+                Objects.equals(expert, request.expert) &&
+                requestStatus == request.requestStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, customer, subService, proposedPrice, date, Address, description, expert, price, requestStatus);
     }
 }

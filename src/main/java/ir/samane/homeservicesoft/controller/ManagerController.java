@@ -16,11 +16,18 @@ import java.util.List;
 @Controller
 public class ManagerController {
 
-    @Autowired
-    ManagerFacade managerFacade;
+    private ManagerFacade managerFacade;
+    private UserService userService;
 
     @Autowired
-    UserService userService;
+    public void setManagerFacade(ManagerFacade managerFacade) {
+        this.managerFacade = managerFacade;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/Manager/ShowExpertPage")
     private String getManagerShowExpertPage(){

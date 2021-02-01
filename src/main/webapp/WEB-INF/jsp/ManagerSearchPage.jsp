@@ -27,7 +27,8 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+            <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a>
+            </li>
         </ul>
     </div>
 </nav>

@@ -26,11 +26,11 @@
             <a class="navbar-brand" href="#" style="color: #1f1f1f">Expert Page</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="ServicePage" style="color: #1f1f1f; background-color: #f1d548">Sub Service
+            <li class="active"><a href="/Expert/ProfilePage" style="color: #1f1f1f; background-color: #f1d548">Sub Service
                 Page</a>
             </li>
-            <li><a href="ExpertPage" style="color: #1f1f1f;">Expert Page</a></li>
-            <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
+            <li><a href="/Expert/RequestPage" style="color: #1f1f1f;">Request Page</a></li>
+            <li><a href="#" style="color: #1f1f1f">Search Page</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
@@ -38,7 +38,7 @@
     </div>
 </nav>
 <div id="message" class="well well-large"
-     style="display: none;justify-content: center;align-items: center;background-color: #f1d548;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
+     style="display: none;justify-content: center;align-items: center;background-color: #6adbbb;width: 85%;height:5%;margin-top: 1%;margin-left: 5%">
 </div>
 <div style="margin: 2%">
     <div class="well well-large" style="width: 40%;margin: 3%">
@@ -126,7 +126,6 @@
             dataType: 'json',
             success: function (data2) {
                 $.each(data2, function (i, f) {
-                    var length = 0;
                     if (!array.includes(f.service.name)) {
                         array[len] = f.service.name;
                         len++;

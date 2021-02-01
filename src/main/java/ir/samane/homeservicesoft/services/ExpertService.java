@@ -17,12 +17,24 @@ import java.util.Optional;
 @Service
 public class ExpertService extends UserService {
 
-    @Autowired
     private ExpertDao expertDao;
-    @Autowired
     private ConfirmationTokenService confirmationTokenService;
-    @Autowired
     private EmailSenderService emailSenderService;
+
+    @Autowired
+    public void setExpertDao(ExpertDao expertDao) {
+        this.expertDao = expertDao;
+    }
+
+    @Autowired
+    public void setConfirmationTokenService(ConfirmationTokenService confirmationTokenService) {
+        this.confirmationTokenService = confirmationTokenService;
+    }
+
+    @Autowired
+    public void setEmailSenderService(EmailSenderService emailSenderService) {
+        this.emailSenderService = emailSenderService;
+    }
 
     public Expert saveExpert(User expert){
         Expert save = expertDao.save((Expert) expert);

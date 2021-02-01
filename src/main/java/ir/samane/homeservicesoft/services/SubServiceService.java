@@ -19,10 +19,14 @@ import java.util.Optional;
 @org.springframework.stereotype.Service
 public class SubServiceService {
 
-    @Autowired
     private SubServiceDao subServiceDao;
     private int maxLength = 30;
     private int pageSize = 2;
+
+    @Autowired
+    public void setSubServiceDao(SubServiceDao subServiceDao) {
+        this.subServiceDao = subServiceDao;
+    }
 
     public void addSubService(SubService subService) throws Exception {
         checkTypeNull(subService.getType());

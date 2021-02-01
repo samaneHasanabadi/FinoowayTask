@@ -9,15 +9,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CustomerService extends UserService {
 
-    @Autowired
-    CustomerDao customerDao;
-    @Autowired
+    private CustomerDao customerDao;
     private ConfirmationTokenService confirmationTokenService;
-    @Autowired
     private EmailSenderService emailSenderService;
+
+    @Autowired
+    public void setCustomerDao(CustomerDao customerDao) {
+        this.customerDao = customerDao;
+    }
+
+    @Autowired
+    public void setConfirmationTokenService(ConfirmationTokenService confirmationTokenService) {
+        this.confirmationTokenService = confirmationTokenService;
+    }
+
+    @Autowired
+    public void setEmailSenderService(EmailSenderService emailSenderService) {
+        this.emailSenderService = emailSenderService;
+    }
 
     @Override
     public User registerUser(User user) throws Exception {
@@ -47,5 +61,12 @@ public class CustomerService extends UserService {
         customer.setStatus(RegisterStatus.APPROVED);
         customerDao.save(customer);
         confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
+    }
+
+    public Customer findById(int id) throws Exception {
+        Optional<Customer> customer = customerDao.findById(id);
+        if(!customer.isPresent())
+            throw new Exception("There is no Customer with this id");
+        return customer.get();
     }
 }

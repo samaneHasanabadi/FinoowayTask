@@ -18,10 +18,15 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
+
     private final Path fileStorageLocation;
-    @Autowired
     private ExpertService expertService;
-     private long maxFileSize = 300000;
+    private long maxFileSize = 300000;
+
+    @Autowired
+    public void setExpertService(ExpertService expertService) {
+        this.expertService = expertService;
+    }
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {

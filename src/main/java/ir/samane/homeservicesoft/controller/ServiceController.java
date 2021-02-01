@@ -18,10 +18,18 @@ import java.util.List;
 @Controller
 public class ServiceController {
 
+    private ServiceService serviceService;
+    private SubServiceService subServiceService;
+
     @Autowired
-    ServiceService serviceService;
+    public void setServiceService(ServiceService serviceService) {
+        this.serviceService = serviceService;
+    }
+
     @Autowired
-    SubServiceService subServiceService;
+    public void setSubServiceService(SubServiceService subServiceService) {
+        this.subServiceService = subServiceService;
+    }
 
     @GetMapping("/ManagerPage")
     public String getManagerPage(){
@@ -83,6 +91,16 @@ public class ServiceController {
     public @ResponseBody Service getServiceById(@PathVariable("id") int id){
         try {
             return serviceService.getServiceById(id);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return null;
+        }
+    }
+
+    @GetMapping("/getSubServiceByServiceId/{id}")
+    public @ResponseBody List<SubService> getSubServiceByServiceId(@PathVariable("id") int id){
+        try {
+            return serviceService.getServiceById(id).getSubServices();
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
             return null;
@@ -171,6 +189,15 @@ public class ServiceController {
             return ResponseEntity.ok("name looks good!");
         }catch (Exception e){
             return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getSubServiceById/{id}")
+    public @ResponseBody SubService getSubServiceById(@PathVariable("id") int id){
+        try {
+            return subServiceService.findById(id);
+        }catch (Exception e){
+            return null;
         }
     }
 

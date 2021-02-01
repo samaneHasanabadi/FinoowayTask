@@ -11,9 +11,13 @@ import java.util.Optional;
 @org.springframework.stereotype.Service
 public class ServiceService {
 
-    @Autowired
-    ServiceDao serviceDao;
+    private ServiceDao serviceDao;
     private int maxLength = 26;
+
+    @Autowired
+    public void setServiceDao(ServiceDao serviceDao) {
+        this.serviceDao = serviceDao;
+    }
 
     public void addService(Service service) throws Exception {
         checkNullField(service.getName(), "name");
@@ -55,8 +59,9 @@ public class ServiceService {
     }
 
     public Service getServiceById(int id) throws Exception {
-        if (serviceDao.findById(id).isPresent())
-            return serviceDao.findById(id).get();
+        Optional<Service> service = serviceDao.findById(id);
+        if (service.isPresent())
+            return service.get();
         else
             throw new Exception("No service found with this id");
     }

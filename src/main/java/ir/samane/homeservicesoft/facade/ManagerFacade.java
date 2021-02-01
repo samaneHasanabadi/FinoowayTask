@@ -16,14 +16,31 @@ import java.util.stream.Collectors;
 
 @Service
 public class ManagerFacade {
-    @Autowired
+
     ExpertService expertService;
-    @Autowired
     UserService userService;
-    @Autowired
     ServiceService serviceService;
-    @Autowired
     SubServiceService subServiceService;
+
+    @Autowired
+    public void setExpertService(ExpertService expertService) {
+        this.expertService = expertService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setServiceService(ServiceService serviceService) {
+        this.serviceService = serviceService;
+    }
+
+    @Autowired
+    public void setSubServiceService(SubServiceService subServiceService) {
+        this.subServiceService = subServiceService;
+    }
 
     public void approveAllWaitingExperts(){
         List<Expert> experts = expertService.getExpertsByStatus(RegisterStatus.WAITING);

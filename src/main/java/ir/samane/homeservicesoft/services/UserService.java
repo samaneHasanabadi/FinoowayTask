@@ -24,20 +24,37 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
-    UserDao userDao;
-    @Autowired
+
+    private UserDao userDao;
     private PasswordEncoder passwordEncoder;
-    @Autowired
     private ConfirmationTokenService confirmationTokenService;
-    @Autowired
-    ExpertService expertService;
+    private ExpertService expertService;
 
     private int maxNameLength = 16;
     private int minNameLength = 2;
 
     public UserService() {
 
+    }
+
+    @Autowired
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void setConfirmationTokenService(ConfirmationTokenService confirmationTokenService) {
+        this.confirmationTokenService = confirmationTokenService;
+    }
+
+    @Autowired
+    public void setExpertService(ExpertService expertService) {
+        this.expertService = expertService;
     }
 
     public User findById(int id) throws Exception {

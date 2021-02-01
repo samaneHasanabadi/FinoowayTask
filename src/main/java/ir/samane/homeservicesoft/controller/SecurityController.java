@@ -13,8 +13,12 @@ import java.security.Principal;
 @Controller
 public class SecurityController {
 
+    private UserService userService;
+
     @Autowired
-    UserService userService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(value = "/getUserId", method = RequestMethod.GET)
     @ResponseBody

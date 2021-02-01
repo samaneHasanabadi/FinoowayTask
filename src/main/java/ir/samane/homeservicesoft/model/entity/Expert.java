@@ -1,5 +1,7 @@
 package ir.samane.homeservicesoft.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ public class Expert extends User{
     List<SubService> subServices = new ArrayList<>();
     private int score;
     @OneToMany
-    private List<Request> requests;
+    private List<Request> requests = new ArrayList<>();
 
     public Expert(){
 

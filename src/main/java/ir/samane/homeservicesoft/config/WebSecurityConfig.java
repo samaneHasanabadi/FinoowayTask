@@ -73,8 +73,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

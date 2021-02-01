@@ -18,14 +18,31 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/")
 public class UserController {
+
+    private UserService userService;
+    private ConfirmationTokenService confirmationTokenService;
+    private ExpertService expertService;
+    private CustomerService customerService;
+
     @Autowired
-    UserService userService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     @Autowired
-    ConfirmationTokenService confirmationTokenService;
+    public void setConfirmationTokenService(ConfirmationTokenService confirmationTokenService) {
+        this.confirmationTokenService = confirmationTokenService;
+    }
+
     @Autowired
-    ExpertService expertService;
+    public void setExpertService(ExpertService expertService) {
+        this.expertService = expertService;
+    }
+
     @Autowired
-    CustomerService customerService;
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping("/login")
     private String getLoginPage(){

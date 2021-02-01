@@ -21,9 +21,9 @@ public class User {
     private String family;
     private String email;
     private String password;
-    @Enumerated(value = EnumType.STRING)
+    //@Enumerated(value = EnumType.STRING)
     private Role role;
-    @Enumerated(value = EnumType.STRING)
+    //@Enumerated(value = EnumType.STRING)
     private RegisterStatus status;
 
     public User() {
