@@ -3,6 +3,7 @@ package ir.samane.homeservicesoft.controller;
 import ir.samane.homeservicesoft.dto.InputDto;
 import ir.samane.homeservicesoft.dto.RequestDto;
 import ir.samane.homeservicesoft.facade.RequestFacade;
+import ir.samane.homeservicesoft.model.entity.Comment;
 import ir.samane.homeservicesoft.model.entity.Option2;
 import ir.samane.homeservicesoft.model.entity.Request;
 import ir.samane.homeservicesoft.services.ExpertOptionMapService;
@@ -145,4 +146,43 @@ public class RequestController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+
+    @GetMapping("/getFinishedRequestsOfCustomer/{customerId}")
+    public @ResponseBody List<Request> getFinishedRequestsOfCustomer(@PathVariable("customerId") int customerId){
+        try {
+            return requestFacade.getFinishedRequestsOfCustomer(customerId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/getPaidRequestsOfCustomer/{customerId}")
+    public @ResponseBody List<Request> getPaidRequestsOfCustomer(@PathVariable("customerId") int customerId){
+        try {
+            return requestFacade.getPaidRequestsOfCustomer(customerId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    //getCommentByRequestId
+
+    @GetMapping("/getCommentByRequestId/{requestId}")
+    public @ResponseBody Comment getCommentByRequestId(@PathVariable("requestId") int requestId){
+        try {
+            return requestFacade.getCommentByRequestId(requestId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @PostMapping("/addCommentToRequest/{requestId}")
+    public ResponseEntity addCommentToRequest(@PathVariable("requestId") int requestId, @RequestBody Comment comment){
+        try {
+            requestFacade.addCommentToRequest(requestId, comment);
+            return ResponseEntity.ok("Comment is added to request successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
 }

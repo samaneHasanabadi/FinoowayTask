@@ -102,6 +102,8 @@ public class ExpertService extends UserService {
         return expertDao.findBySubService(subService);
     }
 
-
+    public void changeCreditOfExpert(Expert expert, double amount){
+        expert.setCredit(expert.getCredit() + amount);
+    }
 
 }

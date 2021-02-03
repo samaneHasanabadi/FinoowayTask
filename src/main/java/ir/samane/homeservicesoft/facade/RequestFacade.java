@@ -1,10 +1,9 @@
 package ir.samane.homeservicesoft.facade;
 
 import ir.samane.homeservicesoft.model.entity.*;
-import ir.samane.homeservicesoft.services.CustomerService;
-import ir.samane.homeservicesoft.services.ExpertService;
-import ir.samane.homeservicesoft.services.RequestService;
-import ir.samane.homeservicesoft.services.SubServiceService;
+import ir.samane.homeservicesoft.model.enums.RequestStatus;
+import ir.samane.homeservicesoft.services.*;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,8 @@ public class RequestFacade {
     private CustomerService customerService;
     private SubServiceService subServiceService;
     private ExpertService expertService;
+    private CommentService commentService;
+    private double percentOfSalary = 0.7;
 
     @Autowired
     public void setRequestService(RequestService requestService) {
@@ -36,6 +37,11 @@ public class RequestFacade {
     @Autowired
     public void setExpertService(ExpertService expertService) {
         this.expertService = expertService;
+    }
+
+    @Autowired
+    public void setCommentService(CommentService commentService) {
+        this.commentService = commentService;
     }
 
     public void addRequest(Request request, int customerId, int subServiceId) throws Exception {
@@ -69,6 +75,39 @@ public class RequestFacade {
     public List<Request> getApprovedRequestsOfExpert(int expertId) throws Exception {
         Expert expert = expertService.findById(expertId);
         return requestService.getApprovedRequestsOfExpert(expert);
+    }
+
+    public List<Request> getFinishedRequestsOfCustomer(int customerId) throws Exception {
+        Customer customer = customerService.findById(customerId);
+        return requestService.getFinishedRequestsOfCustomer(customer);
+    }
+
+    public void payExpertSalaryOfRequest(int requestId) throws Exception {
+        Request request = requestService.findById(requestId);
+        double salary = request.getPrice() * percentOfSalary;
+        expertService.changeCreditOfExpert(request.getExpert(), salary);
+        expertService.saveExpert(request.getExpert());
+        request.setRequestStatus(RequestStatus.PAID);
+        requestService.save(request);
+    }
+
+    public void addCommentToRequest(int requestId, Comment comment) throws Exception {
+        Request request = requestService.findById(requestId);
+        commentService.addComment(comment);
+        request.setComment(comment);
+        //request.setRequestStatus(RequestStatus.COMMENTED);
+        requestService.save(request);
+    }
+
+    public List<Request> getPaidRequestsOfCustomer(int customerId) throws Exception {
+        Customer customer = customerService.findById(customerId);
+        return requestService.getPaidRequestsOfCustomer(customer);
+    }
+
+    public Comment getCommentByRequestId(int requestId) throws Exception {
+        Request request = requestService.findById(requestId);
+        return request.getComment();
+
     }
 
 }

@@ -40,18 +40,18 @@ public class RequestService {
     }
 
     public void checkTitleLength(String title) throws Exception {
-        if(title.length() > maxLength)
+        if (title.length() > maxLength)
             throw new Exception("Title length must be less than " + maxLength);
     }
 
-    public void setRequestStatus(Request request){
-        if(request.getId() != 0)
+    public void setRequestStatus(Request request) {
+        if (request.getId() != 0)
             request.setRequestStatus(RequestStatus.WAITING_FOR_EXPERTS_OPTIONS);
     }
 
     public void checkNullAllFields(Request request) throws Exception {
         checkNullField(request.getTitle(), "title");
-        checkNullField(request.getCustomer() , "Request customer");
+        checkNullField(request.getCustomer(), "Request customer");
         checkNullField(request.getSubService(), "Request sub service");
         checkNullField(request.getDate(), "Request date");
         checkNullField(request.getAddress(), "Request address");
@@ -59,20 +59,20 @@ public class RequestService {
     }
 
     public <T> void checkNullField(T t, String fieldName) throws Exception {
-        if( t == null)
+        if (t == null)
             throw new Exception(fieldName + " can not be null");
     }
 
     public void checkProposedPrice(double price, double subServicePrice) throws Exception {
-        if(price < 0)
+        if (price < 0)
             throw new Exception("price must be positive");
-        if(price < subServicePrice)
+        if (price < subServicePrice)
             throw new Exception("price should be bigger than sub service price");
     }
 
     public void checkDate(Date date) throws Exception {
         Date currentDate = new Date();
-        if(date.before(currentDate))
+        if (date.before(currentDate))
             throw new Exception("Date can not be in the past");
     }
 
@@ -83,7 +83,15 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
-    public List<Request> getRequestsWaitingForChoosingExpert(){
+    public List<Request> getPaidRequestsOfCustomer(Customer customer){
+        return requestDao.findByRequestStatusAndCustomer(RequestStatus.PAID, customer);
+    }
+
+    public void save(Request request){
+        requestDao.save(request);
+    }
+
+    public List<Request> getRequestsWaitingForChoosingExpert() {
         return requestDao.findByRequestStatus(RequestStatus.WAITING_FOR_CHOOSING_EXPERT).stream()
                 .filter(request -> request.getDate().after(new Date()))
                 .collect(Collectors.toList());
@@ -94,10 +102,9 @@ public class RequestService {
         checkNullField(option, "option");
         Request request = findById(requestId);
         checkOptionPrice(option.getPrice(), request.getSubService().getPrice());
-        if(option.getId() > 0){
+        if (option.getId() > 0) {
             optionService.addOption(option);
-        }
-        else {
+        } else {
             optionService.addOption(option);
             ExpertOptionMap expertOptionMap = getExpertOptionMap(expert, option);
             expertOptionMap.setRequest(request);
@@ -119,14 +126,14 @@ public class RequestService {
     }
 
     public void checkOptionPrice(double optionPrice, double subServicePrice) throws Exception {
-        if(optionPrice < subServicePrice)
+        if (optionPrice < subServicePrice)
             throw new Exception("Option price should be greater or equal to" +
                     " related sub service price");
     }
 
     public Request findById(int id) throws Exception {
         Optional<Request> request = requestDao.findById(id);
-        if(!request.isPresent())
+        if (!request.isPresent())
             throw new Exception("There is no request with this id");
         return request.get();
     }
@@ -146,7 +153,7 @@ public class RequestService {
     }
 
     public void checkExpertExistInRequestExpertOption(Request request, Expert expert) throws Exception {
-        if(request.getExpertsOption().stream().filter(expertOption ->
+        if (request.getExpertsOption().stream().filter(expertOption ->
                 expertOption.getExpert().equals(expert)).collect(Collectors.toList())
                 .size() == 0)
             throw new Exception("Expert " + expert.getName() + " " + expert.getFamily() +
@@ -172,6 +179,11 @@ public class RequestService {
         Request request = findById(requestId);
         request.setRequestStatus(RequestStatus.FINISHED);
         requestDao.save(request);
+    }
+
+    public List<Request> getFinishedRequestsOfCustomer(Customer customer) throws Exception {
+        checkNullField(customer, "customer");
+        return requestDao.findByRequestStatusAndCustomer(RequestStatus.FINISHED, customer);
     }
 
 }

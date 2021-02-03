@@ -19,7 +19,7 @@
     <title>title</title>
     <style type="text/css">
         .photo {
-            background-image: url('c.png');
+            background-image: url('/resources/image/c.png');
             background-repeat: no-repeat;
             background-position: center;
             width: 100%;

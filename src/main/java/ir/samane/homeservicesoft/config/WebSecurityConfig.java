@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 ////                .antMatchers(HttpMethod.POST, "/addUser/*").permitAll()
 //                .and().httpBasic();
                 .antMatchers("/home","/signup").permitAll()
+                .antMatchers(HttpMethod.GET, "/resources/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/c.png","/d.png").permitAll()
                 .antMatchers(HttpMethod.POST, "/addUser/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/passwordCheck").permitAll()

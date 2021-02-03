@@ -339,7 +339,7 @@
 <style>
     .vertical-menu {
         width: 20%;
-        background: url("/878.png");
+        background: url("/resources/image/878.png");
         background-repeat: no-repeat;
         background-position: center;
     }

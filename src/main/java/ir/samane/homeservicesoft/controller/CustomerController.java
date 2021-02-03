@@ -53,6 +53,21 @@ public class CustomerController {
         return "CustomerChooseExpertPage";
     }
 
+    @GetMapping("/Customer/PayRequestPage")
+    public String getPayRequestPage(){
+        return "CustomerPayRequestPage";
+    }
+
+    @GetMapping("/Customer/OnlinePaymentPage/{id}")
+    public String getOnlinePaymentPage(){
+        return "CustomerOnlinePaymentPage";
+    }
+
+    @GetMapping("/Customer/CommentPage")
+    public String getCommentPage(){
+        return "CustomerCommentPage";
+    }
+
     @GetMapping("/confirm/customer")
     String confirmMail(@RequestParam("token") String token) {
         Optional<ConfirmationToken> optionalConfirmationToken = confirmationTokenService.findConfirmationTokenByToken(token);

@@ -46,7 +46,8 @@
     <div class="vertical-menu">
         <a href="/Customer/RequestPage">Registered Requests</a>
         <a href="/Customer/ChooseExpertPage" class="active">Choose Expert For Requests</a>
-        <a href="#">Pay Cost of Finished Requests</a>
+        <a href="/Customer/PayRequestPage">Pay Cost of Finished Requests</a>
+        <a href="/Customer/CommentPage">Comment Finished Requests</a>
     </div>
     <div style="width: 80%">
         <table class="table table-striped" id="requestTable">
@@ -234,9 +235,9 @@
 <style>
     .vertical-menu {
         width: 20%;
-        background: url("/878.png");
+        background: url("/resources/image/878.png");
         background-repeat: no-repeat;
-        background-position: center;
+        background-position: bottom;
     }
 
     .vertical-menu a {

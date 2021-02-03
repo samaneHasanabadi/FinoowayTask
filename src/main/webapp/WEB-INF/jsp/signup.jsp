@@ -15,7 +15,7 @@
     <title>title</title>
     <style type="text/css">
         body {
-            background: url('d.png');
+            background: url('/resources/image/d.png');
         }
     </style>
 </head>

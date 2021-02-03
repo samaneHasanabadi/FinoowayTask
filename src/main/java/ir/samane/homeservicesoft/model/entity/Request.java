@@ -28,6 +28,8 @@ public class Request {
     private double price;
     @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus;
+    @OneToOne
+    private Comment comment;
 
     public int getId() {
         return id;
@@ -123,6 +125,14 @@ public class Request {
 
     public void setRequestStatus(RequestStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
     @Override

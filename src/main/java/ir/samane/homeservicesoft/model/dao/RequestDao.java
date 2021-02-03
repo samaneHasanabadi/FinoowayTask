@@ -1,5 +1,6 @@
 package ir.samane.homeservicesoft.model.dao;
 
+import ir.samane.homeservicesoft.model.entity.Customer;
 import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.Request;
 import ir.samane.homeservicesoft.model.entity.SubService;
@@ -24,4 +25,6 @@ public interface RequestDao extends JpaRepository<Request, Integer> {
 
     @Query("SELECT request FROM Request request WHERE request.requestStatus IN :requestStatuses AND request.expert = :expert")
     List<Request> findByRequestStatusAndExpert(@Param("requestStatuses")List<RequestStatus> requestStatuses,@Param("expert") Expert expert);
+
+    List<Request> findByRequestStatusAndCustomer(RequestStatus requestStatus, Customer customer);
 }
