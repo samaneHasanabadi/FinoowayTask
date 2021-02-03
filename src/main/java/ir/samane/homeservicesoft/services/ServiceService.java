@@ -59,7 +59,7 @@ public class ServiceService {
     }
 
     public Service getServiceById(int id) throws Exception {
-        Optional<Service> service = serviceDao.findById(id);
+        Optional<Service> service = serviceDao.getById(id);
         if (service.isPresent())
             return service.get();
         else

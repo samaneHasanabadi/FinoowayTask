@@ -19,7 +19,7 @@ public class SubService {
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Expert> experts = new ArrayList<>();
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     private Service service;
 
     public int getId() {

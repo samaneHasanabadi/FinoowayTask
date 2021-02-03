@@ -44,8 +44,8 @@
 </div>
 <div style="display: flex; flex-direction: row; height: 89%">
     <div class="vertical-menu">
-        <a href="/Expert/RequestPage" class="active">Choose Requests</a>
-        <a href="/Expert/ApproveRequestPage">Approved Requests</a>
+        <a href="/Expert/RequestPage">Choose Requests</a>
+        <a href="/Expert/ApproveRequestPage" class="active">Approved Requests</a>
     </div>
     <div style="width: 80%">
         <table class="table table-striped" id="requestTable">

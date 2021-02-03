@@ -102,15 +102,15 @@
     }
 
     function addDiv(service1, service2) {
-        return "<div style=\"display: flex; flex-direction: row; width: 90%; height: 30%; margin: 5%; background-color: #55d5d1\">\n" +
-            "    <div style=\"display: flex; flex-direction: row;width: 45%; height: 90%; margin-top: 1%;margin-bottom: 1%; margin-right: 3%; margin-left: 3%; background-color: #4CAF50\">\n" +
+        return "<div style=\"display: flex; flex-direction: row; width: 90%; height: 30%; margin: 5%;\">\n" +
+            "    <div style=\"display: flex; flex-direction: row;width: 45%; height: 90%; margin-top: 1%;margin-bottom: 1%; margin-right: 3%; margin-left: 3%;\">\n" +
             "        <div id='servicePicDiv " + service1.id + "' style=\"width: 50%;height: 100%; background-color: #f1d548\">\n" +
             "        </div>\n" +
             "        <a href='/Customer/AddRequestPage/id=" + service1.id + "' id='serviceInfoDiv " + service1.id + "' style=\"width: 50%;height: 100%; background-color: #d1d2d2;\">\n" +
             "            <div style='text-align: center; padding: 70px 0;'><strong style='font-size: 20; color: #1f1f1f'>" + service1.name + "</strong></div>" +
             "        </a>\n" +
             "    </div>\n" +
-            "    <div style=\"display: flex; flex-direction: row;width: 45%; height: 90%; margin-top: 1%;margin-bottom: 1%; margin-right: 3%; margin-left: 3%; background-color: #4CAF50\">\n" +
+            "    <div style=\"display: flex; flex-direction: row;width: 45%; height: 90%; margin-top: 1%;margin-bottom: 1%; margin-right: 3%; margin-left: 3%;\">\n" +
             "        <div id='servicePicDiv " + service2.id + "' style=\"width: 50%;height: 100%; background-color: #f1d548\">\n" +
             "        </div>\n" +
             "        <a href='/Customer/AddRequestPage/id=" + service2.id + "' id='servicePicDiv " + service2.id + "' style=\"width: 50%;height: 100%; background-color: #d1d2d2\">\n" +
@@ -121,8 +121,8 @@
     }
 
     function addOneDive(service) {
-        return "<div style=\"display: flex; flex-direction: row; width: 90%; height: 30%; margin: 5%; background-color: #55d5d1\">\n" +
-            "    <div style=\"display: flex; flex-direction: row;width: 45%; height: 90%; margin-top: 1%;margin-bottom: 1%; margin-right: 3%; margin-left: 3%; background-color: #4CAF50\">\n" +
+        return "<div style=\"display: flex; flex-direction: row; width: 90%; height: 30%; margin: 5%;\">\n" +
+            "    <div style=\"display: flex; flex-direction: row;width: 45%; height: 90%; margin-top: 1%;margin-bottom: 1%; margin-right: 3%; margin-left: 3%;\">\n" +
             "        <div id='servicePicDiv " + service.id + "' style=\"width: 50%;height: 100%; background-color: #f1d548\">\n" +
             "        </div>\n" +
             "        <a href='/Customer/AddRequestPage/id=" + service.id + "' id='servicePicDiv " + service.id + "' style=\"width: 50%;height: 100%; background-color: #d1d2d2\">\n" +

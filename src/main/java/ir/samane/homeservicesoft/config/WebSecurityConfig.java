@@ -38,9 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers(HttpMethod.GET, "/").permitAll()
 ////                .antMatchers(HttpMethod.POST, "/addUser/*").permitAll()
 //                .and().httpBasic();
-                .antMatchers("/home","/signup").permitAll()
-                .antMatchers(HttpMethod.GET, "/resources/*").permitAll()
-                .antMatchers(HttpMethod.GET, "/c.png","/d.png").permitAll()
+                .antMatchers("/home","/signup", "/confirm", "/confirm/customer","/ConfirmErrorPage").permitAll()
+                .antMatchers("/resources/*").permitAll()
+                .antMatchers( "/resources/image/f.png").permitAll()
+                .antMatchers( "/resources/image/c.png","/resources/image/d.png").permitAll()
                 .antMatchers(HttpMethod.POST, "/addUser/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/passwordCheck").permitAll()
                 .antMatchers(HttpMethod.POST, "/nameCheck").permitAll()

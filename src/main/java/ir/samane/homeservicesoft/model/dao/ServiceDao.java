@@ -14,4 +14,6 @@ public interface ServiceDao extends JpaRepository<Service, Integer> {
 
     @Query("SELECT service FROM Service service JOIN FETCH service.subServices")
     Optional<Service> findById(int id);
+
+    Optional<Service> getById(int id);
 }
