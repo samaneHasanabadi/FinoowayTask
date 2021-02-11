@@ -106,4 +106,8 @@ public class ExpertService extends UserService {
         expert.setCredit(expert.getCredit() + amount);
     }
 
+    public double getExpertSalary(int expertId) throws Exception {
+        Expert expert = findById(expertId);
+        return expert.getCredit();
+    }
 }

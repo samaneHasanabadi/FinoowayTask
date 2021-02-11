@@ -1,5 +1,6 @@
 package ir.samane.homeservicesoft.services;
 
+import ir.samane.homeservicesoft.dto.RequestDto;
 import ir.samane.homeservicesoft.model.dao.RequestDao;
 import ir.samane.homeservicesoft.model.entity.*;
 import ir.samane.homeservicesoft.model.enums.RequestStatus;
@@ -166,7 +167,7 @@ public class RequestService {
         requestStatuses.add(RequestStatus.WAITING_FOR_COMING_EXPERT);
         requestStatuses.add(RequestStatus.IN_PROCESS);
         requestStatuses.add(RequestStatus.FINISHED);
-        return requestDao.findByRequestStatusAndExpert(requestStatuses, expert);
+        return requestDao.findByRequestStatusesAndExpert(requestStatuses, expert);
     }
 
     public void startRequest(int requestId) throws Exception {
@@ -184,6 +185,20 @@ public class RequestService {
     public List<Request> getFinishedRequestsOfCustomer(Customer customer) throws Exception {
         checkNullField(customer, "customer");
         return requestDao.findByRequestStatusAndCustomer(RequestStatus.FINISHED, customer);
+    }
+
+    public List<Request> getCustomerRequestsByStatus(RequestStatus requestStatus, Customer customer) throws Exception {
+        checkNullField(customer, "customer");
+        return requestDao.findAll(requestDao.findBy(requestStatus, null, customer));
+    }
+
+    public List<Request> getExpertRequestsByStatus(RequestStatus requestStatus, Expert expert) throws Exception {
+        checkNullField(expert, "customer");
+        return requestDao.findAll(requestDao.findBy(requestStatus, expert, null));
+    }
+
+    public List<Request> findByCriteria(RequestDto requestDto){
+        return requestDao.findAll(requestDao.findByDto(requestDto));
     }
 
 }

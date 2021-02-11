@@ -44,6 +44,16 @@ public class ManagerController {
         return "ManagerShowServicePage";
     }
 
+    @GetMapping("/Manager/SearchRequestsPage")
+    private String getManagerSearchRequestsPage(){
+        return "ManagerSearchRequestsPage";
+    }
+
+    @GetMapping("/Manager/SearchUsersPage")
+    private String getManagerSearchUsersPage(){
+        return "ManagerSearchUsersPage";
+    }
+
     @GetMapping("/approveAllWaitingExperts")
     private ResponseEntity approveAllWaitingExperts(){
         managerFacade.approveAllWaitingExperts();

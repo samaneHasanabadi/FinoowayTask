@@ -11,8 +11,6 @@ public class Expert extends User{
     List<SubService> subServices = new ArrayList<>();
     private int score;
     private double credit;
-    @OneToMany
-    private List<Request> requests = new ArrayList<>();
 
     public Expert(){
 
@@ -40,13 +38,5 @@ public class Expert extends User{
 
     public void setCredit(double credit) {
         this.credit = credit;
-    }
-
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
     }
 }

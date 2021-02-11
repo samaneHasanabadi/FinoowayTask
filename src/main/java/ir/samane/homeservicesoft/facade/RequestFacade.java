@@ -95,6 +95,8 @@ public class RequestFacade {
         Request request = requestService.findById(requestId);
         commentService.addComment(comment);
         request.setComment(comment);
+        request.getExpert().setCredit(request.getExpert().getCredit() + comment.getScore());
+        expertService.saveExpert(request.getExpert());
         //request.setRequestStatus(RequestStatus.COMMENTED);
         requestService.save(request);
     }
@@ -108,6 +110,16 @@ public class RequestFacade {
         Request request = requestService.findById(requestId);
         return request.getComment();
 
+    }
+
+    public List<Request> getCustomerRequestsByStatus(RequestStatus requestStatus, int customerId) throws Exception {
+        Customer customer = customerService.findById(customerId);
+        return requestService.getCustomerRequestsByStatus(requestStatus, customer);
+    }
+
+    public List<Request> getExpertRequestsByStatus(RequestStatus requestStatus, int expertId) throws Exception {
+        Expert expert = expertService.findById(expertId);
+        return requestService.getExpertRequestsByStatus(requestStatus, expert);
     }
 
 }

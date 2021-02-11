@@ -1,20 +1,17 @@
 package ir.samane.homeservicesoft.model.dao;
 
+import ir.samane.homeservicesoft.dto.SearchRequestDto;
 import ir.samane.homeservicesoft.dto.UserDto;
-import ir.samane.homeservicesoft.model.entity.Expert;
-import ir.samane.homeservicesoft.model.entity.Service;
-import ir.samane.homeservicesoft.model.entity.SubService;
-import ir.samane.homeservicesoft.model.entity.User;
+import ir.samane.homeservicesoft.model.entity.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public interface UserDao extends JpaRepository<User, Integer> , JpaSpecificationExecutor<Expert> {
@@ -62,4 +59,5 @@ public interface UserDao extends JpaRepository<User, Integer> , JpaSpecification
             return expertCriteriaQuery.getRestriction();
         };
     }
+
 }

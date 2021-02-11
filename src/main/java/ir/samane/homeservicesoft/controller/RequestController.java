@@ -6,7 +6,7 @@ import ir.samane.homeservicesoft.facade.RequestFacade;
 import ir.samane.homeservicesoft.model.entity.Comment;
 import ir.samane.homeservicesoft.model.entity.Option2;
 import ir.samane.homeservicesoft.model.entity.Request;
-import ir.samane.homeservicesoft.services.ExpertOptionMapService;
+import ir.samane.homeservicesoft.model.enums.RequestStatus;
 import ir.samane.homeservicesoft.services.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +41,9 @@ public class RequestController {
     }
 
     @PostMapping("/checkDate")
-    public ResponseEntity checkDate(@RequestBody RequestDto requestDto) {
+    public ResponseEntity checkDate(@RequestBody Request request) {
         try {
-            requestService.checkDate(requestDto.getDate());
+            requestService.checkDate(request.getDate());
             return ResponseEntity.ok("name looks good!");
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -164,7 +164,6 @@ public class RequestController {
             return null;
         }
     }
-    //getCommentByRequestId
 
     @GetMapping("/getCommentByRequestId/{requestId}")
     public @ResponseBody Comment getCommentByRequestId(@PathVariable("requestId") int requestId){
@@ -185,4 +184,32 @@ public class RequestController {
         }
     }
 
+    @GetMapping("/getCustomerRequests/{customerId}/{status}")
+    public @ResponseBody List<Request> getCustomerRequests(@PathVariable("customerId") int customerId, @PathVariable("status") String status){
+        try {
+            RequestStatus requestStatus = null;
+            if(!status.equals("null"))
+                requestStatus = RequestStatus.valueOf(status);
+            return requestFacade.getCustomerRequestsByStatus(requestStatus, customerId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/getExpertRequests/{expertId}/{status}")
+    public @ResponseBody List<Request> getExpertRequests(@PathVariable("expertId") int expertId, @PathVariable("status") String status){
+        try {
+            RequestStatus requestStatus = null;
+            if(!status.equals("null"))
+                requestStatus = RequestStatus.valueOf(status);
+            return requestFacade.getExpertRequestsByStatus(requestStatus, expertId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @PostMapping("/findByCriteriaRequests")
+    public @ResponseBody List<Request> findByCriteriaRequests(@RequestBody RequestDto requestDto){
+        return requestService.findByCriteria(requestDto);
+    }
 }

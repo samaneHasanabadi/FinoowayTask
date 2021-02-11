@@ -25,19 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        List<RequestMatcher> requestMatchers = new ArrayList<RequestMatcher>();
-        // allow /api/public/product/** and /api/public/content/** not intercepted by Spring OAuth2
-        requestMatchers.add(new AntPathRequestMatcher("/home"));
-        requestMatchers.add(new AntPathRequestMatcher("/signup"));
-        //csrf attacks kari nadarim
         http.csrf().disable()
-//                .requestMatcher(new OrRequestMatcher(requestMatchers))
                 .authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers(HttpMethod.POST, "/").permitAll()
-//                .antMatchers(HttpMethod.GET, "/").permitAll()
-////                .antMatchers(HttpMethod.POST, "/addUser/*").permitAll()
-//                .and().httpBasic();
                 .antMatchers("/home","/signup", "/confirm", "/confirm/customer","/ConfirmErrorPage").permitAll()
                 .antMatchers("/resources/*").permitAll()
                 .antMatchers( "/resources/image/f.png").permitAll()

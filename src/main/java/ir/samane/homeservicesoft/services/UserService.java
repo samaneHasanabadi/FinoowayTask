@@ -1,5 +1,6 @@
 package ir.samane.homeservicesoft.services;
 
+import ir.samane.homeservicesoft.dto.SearchRequestDto;
 import ir.samane.homeservicesoft.dto.UserDto;
 import ir.samane.homeservicesoft.model.dao.ExpertDao;
 import ir.samane.homeservicesoft.model.dao.UserDao;
@@ -16,10 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -29,6 +27,8 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     private ConfirmationTokenService confirmationTokenService;
     private ExpertService expertService;
+    @Autowired
+    private ExpertDao expertDao;
 
     private int maxNameLength = 16;
     private int minNameLength = 2;
@@ -140,6 +140,7 @@ public class UserService implements UserDetailsService {
         checkEmailUniqueness(user.getEmail());
         checkPasswordFormat(user.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreationDate(new Date());
         User savedUser = userDao.save(user);
         return savedUser;
     }
@@ -179,6 +180,18 @@ public class UserService implements UserDetailsService {
         if(confirmationToken.isPresent())
             confirmationTokenService.deleteConfirmationToken(confirmationToken.get().getId());
         userDao.deleteById(id);
+    }
+
+    public List<SearchRequestDto> findByCreationDateAndRequests(Date start, Date end){
+        List<SearchRequestDto> searchRequestDtos = new ArrayList<>();
+       List<User> users =  expertDao.findAll(ExpertDao.findByCreationDateAndRequests(start,end));
+       users.forEach(user -> {
+            SearchRequestDto searchRequestDto = new SearchRequestDto();
+            searchRequestDto.setUser(user);
+            searchRequestDto.setNumberOfRequests(user.getRequests().size());
+            searchRequestDtos.add(searchRequestDto);
+        });
+        return searchRequestDtos;
     }
 
 }

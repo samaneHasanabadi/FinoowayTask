@@ -25,6 +25,10 @@
             </li>
             <li><a href="ExpertPage" style="color: #1f1f1f">Expert Page</a></li>
             <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
+            <li><a href="/Manager/SearchRequestsPage" style="color: #1f1f1f;">Requests Search Page</a>
+            </li>
+            <li><a href="/Manager/SearchUsersPage" style="color: #1f1f1f;">Users Search Page</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>

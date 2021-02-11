@@ -1,31 +1,24 @@
 package ir.samane.homeservicesoft.dto;
 
-import ir.samane.homeservicesoft.model.entity.Customer;
-import ir.samane.homeservicesoft.model.entity.SubService;
+import ir.samane.homeservicesoft.model.enums.RequestStatus;
 
 import java.util.Date;
 
 public class RequestDto {
-    private Customer customer;
-    private SubService subService;
+
+    private String subService;
     private double proposedPrice;
-    private Date date;
-    private String Address;
-    private String description;
+    private double price;
+    private Date startDate;
+    private Date endDate;
+    private String address;
+    private RequestStatus requestStatus;
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public SubService getSubService() {
+    public String getSubService() {
         return subService;
     }
 
-    public void setSubService(SubService subService) {
+    public void setSubService(String subService) {
         this.subService = subService;
     }
 
@@ -37,27 +30,43 @@ public class RequestDto {
         this.proposedPrice = proposedPrice;
     }
 
-    public Date getDate() {
-        return date;
+    public double getPrice() {
+        return price;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
-    public String getDescription() {
-        return description;
+    public RequestStatus getRequestStatus() {
+        return requestStatus;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRequestStatus(RequestStatus requestStatus) {
+        this.requestStatus = requestStatus;
     }
 }

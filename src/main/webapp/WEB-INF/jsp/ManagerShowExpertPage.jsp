@@ -26,6 +26,10 @@
             <li class="active"><a href="ExpertPage" style="color: #1f1f1f; background-color: #6adbbb">Expert Page</a>
             </li>
             <li><a href="SearchPage" style="color: #1f1f1f">Search Page</a></li>
+            <li><a href="/Manager/SearchRequestsPage" style="color: #1f1f1f;">Requests Search Page</a>
+            </li>
+            <li><a href="/Manager/SearchUsersPage" style="color: #1f1f1f;">Users Search Page</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
@@ -463,6 +467,7 @@
         });
     });
 
+    var serviceFlag = true;
     function getSubServices(expertId) {
         $("#expertId").val(expertId);
         ExpertId = expertId;
@@ -511,6 +516,7 @@
 
     var count = 0;
     $("#addRowButton").click(function () {
+        serviceFlag = true;
         addRow();
     });
 
@@ -535,22 +541,26 @@
             }
         });
     };
-
     function getServiceSelector(id) {
-        $.ajax({
-            type: "GET",
-            url: "/getAllServices",
-            success: function (data) {
-                var newId = "#" + id;
-                $(newId).empty();
-                $(function () {
-                    $.each(data, function (i, f) {
-                        $(newId).append("<option id='" + f.id + "' value='" + f.name + "'>" +
-                            f.name + "</option>");
+        if(serviceFlag) {
+            $.ajax({
+                type: "GET",
+                url: "/getAllServices",
+                async: false,
+                success: function (data) {
+                    var newId = "#" + id;
+                    $(newId).empty();
+                    serviceFlag = false;
+                    $(function () {
+                        $.each(data, function (i, f) {
+                            $(newId).append("<option id='" + f.id + "' value='" + f.name + "'>" +
+                                f.name + "</option>");
+                        });
                     });
-                });
-            }
-        });
+
+                }
+            });
+        }
     };
 
     function getSubServicesOfServiceBySelectedOption(selectorId, serviceId, selected) {
@@ -579,8 +589,10 @@
     function getSubServicesOfService(selectorId) {
         var parts = selectorId.toString().split("serviceSelector");
         var subServiceSelectorId = "#subServiceSelector" + parts[1];
-        selectorId = "#" + selectorId;
-        var serviceId = $('option:selected', $(selectorId).options).attr('id');
+        var options = document.getElementById(selectorId).options;
+        //var serviceId = $('option:selected', $(selectorId).options).attr('id');
+        var selectedIndex = options.selectedIndex;
+        var serviceId = options[selectedIndex].id;
         $.ajax({
             type: "GET",
             url: "/getSubServicesOfService/" + serviceId,

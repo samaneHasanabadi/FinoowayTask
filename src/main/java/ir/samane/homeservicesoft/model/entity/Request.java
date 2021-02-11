@@ -12,18 +12,18 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Customer customer;
     @OneToOne
     private SubService subService;
     private double proposedPrice;
     private Date date;
-    private String Address;
+    private String address;
     private String description;
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "request")
     private Set<ExpertOptionMap> expertsOption = new HashSet<>();
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Expert expert;
     private double price;
     @Enumerated(value = EnumType.STRING)
@@ -80,11 +80,11 @@ public class Request {
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
     public String getDescription() {
@@ -142,7 +142,7 @@ public class Request {
                 ", title='" + title + '\'' +
                 ", customer=" + customer +
                 ", date=" + date +
-                ", Address='" + Address + '\'' +
+                ", Address='" + address + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", requestStatus=" + requestStatus +
@@ -161,7 +161,7 @@ public class Request {
                 Objects.equals(customer, request.customer) &&
                 Objects.equals(subService, request.subService) &&
                 Objects.equals(date, request.date) &&
-                Objects.equals(Address, request.Address) &&
+                Objects.equals(address, request.address) &&
                 Objects.equals(description, request.description) &&
                 Objects.equals(expert, request.expert) &&
                 requestStatus == request.requestStatus;
@@ -169,6 +169,6 @@ public class Request {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, customer, subService, proposedPrice, date, Address, description, expert, price, requestStatus);
+        return Objects.hash(id, title, customer, subService, proposedPrice, date, address, description, expert, price, requestStatus);
     }
 }

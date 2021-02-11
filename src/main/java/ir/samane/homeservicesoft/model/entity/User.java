@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -25,6 +27,9 @@ public class User {
     private Role role;
     @Enumerated(value = EnumType.STRING)
     private RegisterStatus status;
+    private Date creationDate;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Request> requests;
 
     public User() {
     }
@@ -87,5 +92,21 @@ public class User {
 
     public void setStatus(RegisterStatus status) {
         this.status = status;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
 }

@@ -68,6 +68,11 @@ public class CustomerController {
         return "CustomerCommentPage";
     }
 
+    @GetMapping("/Customer/RequestHistory")
+    public String getRequestHistoryPage(){
+        return "CustomerRequestHistory";
+    }
+
     @GetMapping("/confirm/customer")
     String confirmMail(@RequestParam("token") String token) {
         Optional<ConfirmationToken> optionalConfirmationToken = confirmationTokenService.findConfirmationTokenByToken(token);

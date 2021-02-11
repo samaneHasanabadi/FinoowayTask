@@ -53,6 +53,11 @@ public class ExpertController {
         return "ExpertApproveRequestPage";
     }
 
+    @GetMapping("/Expert/RequestHistory")
+    public String getRequestHistoryPage(){
+        return "ExpertRequestHistory";
+    }
+
     @PostMapping("/uploadFile/{id}")
     public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id") int id) {
         try {
@@ -81,5 +86,15 @@ public class ExpertController {
     @GetMapping("/Expert/ProfilePage")
     public String getExpertPage(){
         return "ExpertServicePage";
+    }
+
+    @GetMapping("/totalSalary/{expertId}")
+    public ResponseEntity getExpertSalary(@PathVariable("expertId") int expertId){
+        try {
+            double salary = expertService.getExpertSalary(expertId);
+            return ResponseEntity.ok("Total Salary is : " + salary);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 }

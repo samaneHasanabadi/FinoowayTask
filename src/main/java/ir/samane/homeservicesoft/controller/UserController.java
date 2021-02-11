@@ -1,7 +1,9 @@
 package ir.samane.homeservicesoft.controller;
 
+import ir.samane.homeservicesoft.dto.DateDto;
 import ir.samane.homeservicesoft.dto.MessageDto;
 import ir.samane.homeservicesoft.dto.InputDto;
+import ir.samane.homeservicesoft.dto.SearchRequestDto;
 import ir.samane.homeservicesoft.model.entity.Customer;
 import ir.samane.homeservicesoft.model.entity.Expert;
 import ir.samane.homeservicesoft.model.entity.Service;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -146,6 +150,11 @@ public class UserController {
         } catch (Exception exception) {
             return ResponseEntity.status(400).body(exception.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/findByCreationDateAndRequests", method = RequestMethod.POST)
+    public @ResponseBody List<SearchRequestDto> findByCreationDateAndRequests(@RequestBody DateDto dateDto) {
+        return userService.findByCreationDateAndRequests(dateDto.getStart(), dateDto.getEnd());
     }
 
 }

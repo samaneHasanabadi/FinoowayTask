@@ -24,6 +24,10 @@
             <li><a href="ExpertPage" style="color: #1f1f1f;">Expert Page</a></li>
             <li class="active"><a href="SearchPage" style="color: #1f1f1f; background-color: #6adbbb">Search Page</a>
             </li>
+            <li><a href="/Manager/SearchRequestsPage" style="color: #1f1f1f;">Requests Search Page</a>
+            </li>
+            <li><a href="/Manager/SearchUsersPage" style="color: #1f1f1f;">Users Search Page</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout" style="color: #1f1f1f"><span class="glyphicon glyphicon-log-in"></span> Log out</a>
@@ -113,11 +117,47 @@
         <th scope="col">Service</th>
         <th scope="col">Sub Service</th>
         <th scope="col">Score</th>
+        <th scope="col">See Requests</th>
     </tr>
     </thead>
     <tbody>
     </tbody>
 </table>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="editSubService" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Requests</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-striped" id="requestTable">
+                        <thead class="thead-light" style="background-color: #dddede">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th></th>
+                            <th scope="col">Sub Service</th>
+                            <th></th>
+                            <th scope="col">Date</th>
+                            <th></th>
+                            <th scope="col">Price</th>
+                            <th></th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script>
@@ -158,7 +198,8 @@
                         "</td><td class='family'>" + f.family + "</td><td class='username'>" + f.email + "</td><td class='id'>" + f.role + "</td>" +
                         "<td class='status'>" + f.status + "</td><td id='tdSubService" + f.id + "' class='subServices' >" + getServiceArrays(f.subServices, f.role) + "</td>" +
                         "<td id='tdSubService" + f.id + "' class='subServices' >" + getOfArrays(f.subServices, f.role) + "</td>" +
-                        "<td class='id'>" + getScore(f.role, f.score) + "</td></tr>");
+                        "<td class='id'>" + getScore(f.role, f.score) + "</td>" +
+                        "<td><button id='seeRequestsBtn " + f.id + "' onclick='getRequests("+ f.id +",\""+ f.role+"\")' data-toggle='modal' data-target='#editSubService' class=\"btn btn-warning\" style='background-color: #6adbbb;border-color: #6adbbb;color: #1f1f1f'>Requests</button></td></tr>");
                 });
             }
         });
@@ -195,5 +236,56 @@
         }
         return text;
     }
+
+    function getRequests(id, role) {
+        if (role === "CUSTOMER") {
+            var status = "null";
+            $.ajax({
+                type: "GET",
+                url: "/getCustomerRequests/" + id + "/" + status,
+                success: function (data) {
+                    $("#requestTable tr:gt(0)").remove();
+                    $(function () {
+                        var row = "";
+                        $.each(data, function (i, f) {
+                            row = row + addRowToRequestTable(i, f);
+                        });
+                        $("#requestTable").append(row);
+                    });
+                }
+            });
+        }
+        if(role === "EXPERT"){
+            var status = "null";
+            $.ajax({
+                type: "GET",
+                url: "/getExpertRequests/" + id + "/" + status,
+                success: function (data) {
+                    $("#requestTable tr:gt(0)").remove();
+                    $(function () {
+                        var row = "";
+                        $.each(data, function (i, f) {
+                            row = row + addRowToRequestTable(i, f);
+                        });
+                        $("#requestTable").append(row);
+                    });
+                }
+            });
+        }
+    }
+
+    function addRowToRequestTable(i, f) {
+        var dateFormat = JSON.stringify(f.date);
+        var res = dateFormat.split("-");
+        var day = (res[2].split("\""))[0].split("T")[0];
+        var month = res[1];
+        var year = (res[0].split("\""))[1];
+        var newDate = month + "/" + day + "/" + year;
+        var row = "";
+        row = row + "<tr id='tr " + f.id + "'><th scope=\"row\">" + (i + 1) + "</th><td class='title'>" + f.title + "</td><td></td>";
+        row = row + "<td class='subService'>" + f.subService.name + "</td><td></td><td class='date'>" + newDate + "</td><td></td><td class='proposedPrice'>" + f.price + "</td><td></td><td class='status'>" + f.requestStatus + "</td><td></tr>";
+        return row;
+    }
+
 </script>
 </html>
